@@ -7,6 +7,9 @@ import useRefreshToken from "./hooks/useRefreshToken";
 import { useDispatch, useSelector } from "react-redux";
 import verifyToken from "./middleware/verifiToken";
 import { Checkout } from "./Pages/CheckOut";
+import { Home } from "./Pages/Home";
+import './index.css'; // or './tailwind.css'
+
 
 function App() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -32,14 +35,17 @@ function App() {
   return (
     <>
       <Routes>
-          <Route path="/" element={<Layout />}/>
-          <Route path="/Login" element={isVerified ? <Layout /> : <Login />}/>
-          <Route path="/signup" element={isVerified ?<Layout /> : <Signup />}/>
-          <Route path="/checkout/:id" element={isVerified ? <Checkout /> : <Login />}/>
-
+        <Route path="/*" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route
+            path="checkout/:id"
+            element={isVerified ? <Checkout /> : <Login />}
+          />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        
       </Routes>
-     
-     
     </>
   );
 }

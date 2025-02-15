@@ -4,98 +4,184 @@ import { Link } from "react-router-dom";
 import removeCookie from "../auth/removeCookie";
 import { logOut } from "../features/auth/authSlice";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const Nav = () => {
-  const [user, setUser] = useState(null); // Use useState to manage user state
-  const reduxUser = useSelector((state) => state.auth.user); // Get user from Redux store
-  const dispatch = useDispatch()
-  useEffect(() => {
-    // Update local user state when Redux user state changes
-    setUser(reduxUser);
-  }, [reduxUser]); // Re-run effect when reduxUser changes
+  const [user, setUser] = useState(null); 
+  const reduxUser = useSelector((state) => state.auth.user); 
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
- const handleLogout = async (e) => {
+  useEffect(() => {
+    setUser(reduxUser);
+  }, [reduxUser]);
+
+  const handleLogout = async (e) => {
     e.preventDefault();
     removeCookie("refresh_token");
 
     try {
-      // Make the request to the logout endpoint
       const response = await axios.post(
-        "http://localhost:8000/auth/log-out",
+        `${import.meta.env.VITE_API_URL}/auth/log-out`,
         {},
         {
-          withCredentials: true, // Include cookies in the request
+          withCredentials: true,
         }
       );
 
       if (response.status === 201) {
-        // Dispatch the logOut action to clear the Redux state
         dispatch(logOut());
-        // Notif_Toast(
-        //   toast,
-        //   "Log out successful",
-        //   "You have successfully logged out",
-        //   "success"
-        // );
-        // Navigate to the login page
         navigate("/Login");
       } else {
         console.error("Failed to log out");
-        // Handle the error as needed
       }
     } catch (error) {
       console.error("Error logging out:", error);
-      // Handle the error as needed
     }
   };
+
   return (
-    <header id="header" className="header d-flex align-items-center sticky-top">
-      <div className="container-fluid container-xl position-relative d-flex align-items-center">
-        <a href="index.html" className="logo d-flex align-items-center me-auto">
-          <h1 className="sitename">REVE</h1>
-        </a>
-        <nav id="navmenu" className="navmenu">
-          <ul>
+    <header className="bg-white shadow-md fixed top-0 left-0 w-full z-10 mb-6">
+      <div className="container mx-auto flex justify-between items-center p-3">
+        <Link to="/" className="text-2xl font-bold text-gray-800">
+          REVE
+        </Link>
+
+        {/* Desktop Menu */}
+        <nav className="hidden items-center md:flex space-x-6">
+          <a href="#hero" className="text-gray-600 hover:text-blue-500">
+            Home
+          </a>
+          <a href="#services" className="text-gray-600 hover:text-blue-500">
+            Services
+          </a>
+          <a href="#about" className="text-gray-600 hover:text-blue-500">
+            About
+          </a>
+          <a href="#portfolio" className="text-gray-600 hover:text-blue-500">
+            Portfolio
+          </a>
+          <a href="#pricing" className="text-gray-600 hover:text-blue-500">
+            Pricing
+          </a>
+          <a href="#contact" className="text-gray-600 hover:text-blue-500">
+            Contact
+          </a>
+          {user?.id ? (
+            <Link
+              to="/logout"
+              onClick={(e) => handleLogout(e)}
+              className="text-white bg-blue-500 hover:bg-blue-600 rounded-full px-4 py-2"
+            >
+              Logout
+            </Link>
+          ) : (
+            <Link
+              to="/signup"
+              className="text-white bg-blue-500 hover:bg-blue-600 rounded-full px-4 py-2"
+            >
+              Get Started
+            </Link>
+          )}
+        </nav>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="md:hidden text-2xl text-gray-800 focus:outline-none"
+        >
+          {isMenuOpen ? (
+            <i className="bi bi-x-lg"></i>
+          ) : (
+            <i className="bi bi-list"></i>
+          )}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <nav className="md:hidden bg-white shadow-md">
+          <ul className="space-y-4 p-4">
             <li>
-              <a href="#hero" className="active">
+              <a
+                href="#hero"
+                className="block text-gray-600 hover:text-blue-500"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Home
               </a>
             </li>
             <li>
-              <a href="#services">Services</a>
+              <a
+                href="#services"
+                className="block text-gray-600 hover:text-blue-500"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Services
+              </a>
             </li>
             <li>
-              <a href="#about">About</a>
+              <a
+                href="#about"
+                className="block text-gray-600 hover:text-blue-500"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </a>
             </li>
             <li>
-              <a href="#portfolio">Portfolio</a>
+              <a
+                href="#portfolio"
+                className="block text-gray-600 hover:text-blue-500"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Portfolio
+              </a>
             </li>
             <li>
-              <a href="#pricing">Pricing</a>
+              <a
+                href="#pricing"
+                className="block text-gray-600 hover:text-blue-500"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Pricing
+              </a>
             </li>
             <li>
-              <a href="#contact">Contact</a>
+              <a
+                href="#contact"
+                className="block text-gray-600 hover:text-blue-500"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
+              </a>
+            </li>
+            <li>
+              {user?.id ? (
+                <Link
+                  to="/logout"
+                  onClick={(e) => {
+                    handleLogout(e);
+                    setIsMenuOpen(false);
+                  }}
+                  className="block text-white bg-blue-500 hover:bg-blue-600 rounded-full px-4 py-2"
+                >
+                  Logout
+                </Link>
+              ) : (
+                <Link
+                  to="/signup"
+                  className="block text-white bg-blue-500 hover:bg-blue-600 rounded-full px-4 py-2"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Get Started
+                </Link>
+              )}
             </li>
           </ul>
-          {/* Mobile Navigation Toggle */}
-          <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
-
-        {user?.id ? ( // Check if user exists and has an ID
-          <>
-            
-            <Link to="/logout" className="btn-getstarted" onClick={(e) => handleLogout(e)}>
-              Logout
-            </Link>
-            {/* <p>{user?.email}</p> Display user's email */}
-          </>
-        ) : (
-          // If no user, show "Get Started" button
-          <Link to="/signup" className="btn-getstarted">
-            Get Started
-          </Link>
-        )}
-      </div>
+      )}
     </header>
   );
 };

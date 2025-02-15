@@ -20,7 +20,7 @@ export const Checkout = () => {
   const handle_payment = async () => {
     try {
       const response = await axios.post(
-        'http://localhost:8000/payment/create_chapa',
+        `${import.meta.env.VITE_API_URL}/create_chapa`,  // Use the env variable here
         {
           packeg_id: id,
           user_id: user.id,
