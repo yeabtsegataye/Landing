@@ -10,7 +10,6 @@ import { Home } from "./Pages/Home";
 
 function App() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-
   const refresh = useRefreshToken();
   const dispatch = useDispatch();
   const [isVerified, setIsVerified] = useState(false);

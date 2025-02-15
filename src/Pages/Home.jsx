@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Nav } from "../Components/Nav";
 import { Footer } from "../Components/Footer";
+import hero from "../assets/img/hero-img.png"
+import menu from '../assets/img/menu.png'
+import dashboard from "../assets/img/dashboard.png"
 
 export const Home = () => {
   const [pricingPlans, setPricingPlans] = useState([]);
@@ -61,7 +64,7 @@ export const Home = () => {
               // data-aos-delay="100"
             >
               <img
-                src="assets/img/hero-img.png"
+                src={hero}
                 className="w-full h-auto animate-slow-bounce"
                 alt="Hero Section"
               />
@@ -183,7 +186,7 @@ export const Home = () => {
               data-aos-delay="100"
             >
               <img
-                src="assets/img/menu.png"
+                src={menu}
                 className="w-80 h-auto rounded-lg shadow-lg"
                 alt="Digital Menu System"
               />
@@ -258,7 +261,7 @@ export const Home = () => {
             data-aos-delay="100"
           >
             <img
-              src="/assets/img/dashboard.png"
+              src={dashboard}
               alt="Dashboard Preview"
               className="w-full h-auto"
             />
