@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import verifyToken from "./middleware/verifiToken";
 import { Checkout } from "./Pages/CheckOut";
 import { Home } from "./Pages/Home";
-import './index.css'; // or './tailwind.css'
 
 
 function App() {
