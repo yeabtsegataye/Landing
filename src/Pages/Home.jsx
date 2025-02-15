@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Nav } from "../Components/Nav";
+import { Footer } from "../Components/Footer";
 
 export const Home = () => {
   const [pricingPlans, setPricingPlans] = useState([]);
@@ -26,6 +28,7 @@ export const Home = () => {
   }, []);
   return (
     <>
+     <Nav />
       <section id="hero" className="mt-16 bg-gray-50 py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -486,6 +489,7 @@ export const Home = () => {
         </div>
       </section>
       {/* Call To Action Section */}
+        <Footer />
     </>
   );
 };

@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import { Layout } from "./Layout";
 import Login from "./auth/Login";
 import { Signup } from "./auth/Signup";
 import { useEffect, useState } from "react";
@@ -8,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import verifyToken from "./middleware/verifiToken";
 import { Checkout } from "./Pages/CheckOut";
 import { Home } from "./Pages/Home";
-
 
 function App() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -34,16 +32,13 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/*" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route
-            path="checkout/:id"
-            element={isVerified ? <Checkout /> : <Login />}
-          />
-        </Route>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="checkout/:id"
+          element={isVerified ? <Checkout /> : <Login />}
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        
       </Routes>
     </>
   );
