@@ -6,11 +6,73 @@ import { Footer } from "../Components/Footer";
 import hero from "../assets/img/hero-img.png"
 import menu from '../assets/img/menu.png'
 import dashboard from "../assets/img/dashboard.png"
+import {
+  QrCodeIcon,
+  CreditCardIcon,
+  ClockIcon,
+  MapPinIcon,
+  PhoneIcon,
+  EnvelopeIcon,
+  ChartBarIcon,
+  CurrencyDollarIcon,
+  ChatBubbleBottomCenterTextIcon,
+} from "@heroicons/react/24/outline";
+import { motion } from "framer-motion";
 
 export const Home = () => {
   const [pricingPlans, setPricingPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  // Animation Variants
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
+  const iconVariants = {
+    hover: { scale: 1.2, transition: { duration: 0.3 } },
+  };
+
+
+  // Service Data with Heroicons
+  const services = [
+    {
+      icon: <QrCodeIcon className="text-blue-600 h-12 w-12" />,
+      title: "QR Code Menu Ordering",
+      description:
+        "Customers can effortlessly scan a QR code to access your digital menu, browse food options, and place orders directly from their devices.",
+    },
+    {
+      icon: <CreditCardIcon className="text-blue-600 h-12 w-12" />,
+      title: "Seamless Payment Options",
+      description:
+        "Pay via QR code or manually—flexibility that ensures a smooth and convenient experience for every customer.",
+    },
+    {
+      icon: <ClockIcon className="text-blue-600 h-12 w-12" />,
+      title: "Faster Service",
+      description:
+        "Reduce wait times and improve customer satisfaction with a streamlined ordering process.",
+    },
+    {
+      icon: <ChartBarIcon className="text-blue-600 h-12 w-12" />,
+      title: "Real-Time Analytics Dashboard",
+      description:
+        "Gain actionable insights into your business performance with live data on daily revenue, food sales, and customer trends.",
+    },
+    {
+      icon: <CurrencyDollarIcon className="text-blue-600 h-12 w-12" />,
+      title: "Financial Management",
+      description:
+        "Monitor your financial status in real-time, enabling better resource allocation and decision-making.",
+    },
+    {
+      icon: <ChatBubbleBottomCenterTextIcon className="text-blue-600 h-12 w-12" />,
+      title: "Customer Feedback",
+      description:
+        "Access and analyze customer comments and reviews to continuously improve your services.",
+    },
+  ];
 
   const fetchPricingPlans = async () => {
     try {
@@ -87,81 +149,75 @@ export const Home = () => {
           }
         `}</style>
       </section>
-      <section id="services" className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Service Item 1 */}
-            <div
-              className="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow duration-300"
-              data-aos="fade-up"
-              data-aos-delay="100"
-            >
-              <div className="text-blue-600 text-4xl mb-4">
-                <i className="bi bi-activity"></i>
-              </div>
-              <h4 className="text-xl font-bold mb-2 text-gray-800">
-                <a
-                  href="#"
-                  className="hover:text-blue-600 transition duration-300"
-                >
-                  QR Code Menu Ordering
-                </a>
-              </h4>
-              <p className="text-gray-600">
-                Customers can effortlessly scan a QR code to access your digital
-                menu, browse food options, and place orders directly from their
-                devices.
-              </p>
-            </div>
+<section id="services" className="py-16 bg-gray-50">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Service Item 1 */}
+          <div
+            className="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow duration-300"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            <QrCodeIcon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+            <h4 className="text-xl font-bold mb-2 text-gray-800">
+              <a
+                href="#"
+                className="hover:text-blue-600 transition duration-300"
+              >
+                QR Code Menu Ordering
+              </a>
+            </h4>
+            <p className="text-gray-600">
+              Customers can effortlessly scan a QR code to access your digital
+              menu, browse food options, and place orders directly from their
+              devices.
+            </p>
+          </div>
 
-            {/* Service Item 2 */}
-            <div
-              className="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow duration-300"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <div className="text-blue-600 text-4xl mb-4">
-                <i className="bi bi-bounding-box-circles"></i>
-              </div>
-              <h4 className="text-xl font-bold mb-2 text-gray-800">
-                <a
-                  href="#"
-                  className="hover:text-blue-600 transition duration-300"
-                >
-                  Seamless Payment Options
-                </a>
-              </h4>
-              <p className="text-gray-600">
-                Pay via QR code or manually—flexibility that ensures a smooth
-                and convenient experience for every customer.
-              </p>
-            </div>
+          {/* Service Item 2 */}
+          <div
+            className="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow duration-300"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            <CreditCardIcon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+            <h4 className="text-xl font-bold mb-2 text-gray-800">
+              <a
+                href="#"
+                className="hover:text-blue-600 transition duration-300"
+              >
+                Seamless Payment Options
+              </a>
+            </h4>
+            <p className="text-gray-600">
+              Pay via QR code or manually—flexibility that ensures a smooth and
+              convenient experience for every customer.
+            </p>
+          </div>
 
-            {/* Service Item 3 */}
-            <div
-              className="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow duration-300"
-              data-aos="fade-up"
-              data-aos-delay="300"
-            >
-              <div className="text-blue-600 text-4xl mb-4">
-                <i className="bi bi-calendar4-week"></i>
-              </div>
-              <h4 className="text-xl font-bold mb-2 text-gray-800">
-                <a
-                  href="#"
-                  className="hover:text-blue-600 transition duration-300"
-                >
-                  Faster Service
-                </a>
-              </h4>
-              <p className="text-gray-600">
-                Reduce wait times and improve customer satisfaction with a
-                streamlined ordering process.
-              </p>
-            </div>
+          {/* Service Item 3 */}
+          <div
+            className="bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition-shadow duration-300"
+            data-aos="fade-up"
+            data-aos-delay="300"
+          >
+            <ClockIcon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+            <h4 className="text-xl font-bold mb-2 text-gray-800">
+              <a
+                href="#"
+                className="hover:text-blue-600 transition duration-300"
+              >
+                Faster Service
+              </a>
+            </h4>
+            <p className="text-gray-600">
+              Reduce wait times and improve customer satisfaction with a
+              streamlined ordering process.
+            </p>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
       <section id="about" className="py-16 bg-white">
         {/* Section Title */}
@@ -271,80 +327,48 @@ export const Home = () => {
 
       {/* Services Section */}
       <section id="services" className="py-16 bg-white">
-        {/* Section Title */}
-        <div
-          className="container mx-auto px-4 text-center mb-12"
-          data-aos="fade-up"
-        >
-          <h2 className="text-3xl font-bold text-gray-800 mt-2">Services</h2>
-          <p className="text-gray-600 mt-4">
-            Necessitatibus eius consequatur ex aliquid fuga eum quidem sint
-            consectetur velit
-          </p>
-        </div>
-        {/* End Section Title */}
+      {/* Section Title */}
+      <div className="container mx-auto px-4 text-center mb-12">
+        <h2 className="text-3xl font-bold text-gray-800 mt-2">Services</h2>
+        <p className="text-gray-600 mt-4">
+          Necessitatibus eius consequatur ex aliquid fuga eum quidem sint
+          consectetur velit
+        </p>
+      </div>
+      {/* End Section Title */}
 
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap -mx-4">
-            {/* Service Items */}
-            {[
-              {
-                icon: "bi bi-activity",
-                title: "QR Code Menu Ordering",
-                description:
-                  "Customers can effortlessly scan a QR code to access your digital menu, browse food options, and place orders directly from their devices.",
-              },
-              {
-                icon: "bi bi-broadcast",
-                title: "Seamless Payment Options",
-                description:
-                  "Pay via QR code or manually—flexibility that ensures a smooth and convenient experience for every customer.",
-              },
-              {
-                icon: "bi bi-easel",
-                title: "Faster Service",
-                description:
-                  "Reduce wait times and improve customer satisfaction with a streamlined ordering process.",
-              },
-              {
-                icon: "bi bi-bounding-box-circles",
-                title: "Real-Time Analytics Dashboard",
-                description:
-                  "Gain actionable insights into your business performance with live data on daily revenue, food sales, and customer trends.",
-              },
-              {
-                icon: "bi bi-calendar4-week",
-                title: "Financial Management",
-                description:
-                  "Monitor your financial status in real-time, enabling better resource allocation and decision-making.",
-              },
-              {
-                icon: "bi bi-chat-square-text",
-                title: "Customer Feedback",
-                description:
-                  "Access and analyze customer comments and reviews to continuously improve your services.",
-              },
-            ].map((service, index) => (
-              <div
-                className="w-full md:w-1/2 lg:w-1/3 px-4 mb-8"
-                data-aos="fade-up"
-                data-aos-delay={100 * (index + 1)}
-                key={index}
-              >
-                <div className="bg-white shadow-lg rounded-lg p-6 text-center transition-transform transform hover:-translate-y-2 hover:shadow-2xl">
-                  <div className="text-blue-600 text-4xl mb-4">
-                    <i className={service.icon}></i>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600">{service.description}</p>
-                </div>
+      <div className="container mx-auto px-4">
+        <div className="flex flex-wrap -mx-4">
+          {/* Service Items */}
+          {services.map((service, index) => (
+            <motion.div
+              className="w-full md:w-1/2 lg:w-1/3 px-4 mb-8"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={cardVariants}
+              transition={{ delay: 0.2 * index }}
+              key={index}
+            >
+              <div className="bg-white shadow-lg rounded-lg p-6 text-center transition-transform transform hover:-translate-y-2 hover:shadow-2xl">
+                <motion.div
+                  className="flex justify-center mb-4"
+                  whileHover="hover"
+                  variants={iconVariants}
+                >
+                  {service.icon}
+                </motion.div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600">{service.description}</p>
               </div>
-            ))}
-          </div>
+            </motion.div>
+          ))}
         </div>
-      </section>
+      </div>
+    </section>
+
 
       {/* Pricing Section */}
       <section id="pricing" className="py-16 bg-gray-50">
@@ -423,74 +447,102 @@ export const Home = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 bg-gray-50">
-        {/* Section Title */}
-        <div
-          className="container mx-auto px-4 text-center mb-12"
-          data-aos="fade-up"
-        >
-          <h2 className="text-3xl font-bold text-gray-800 mt-2">
-            Contact us today
-          </h2>
-          <p className="text-gray-600 mt-4">
-            Schedule a demo or learn more about how we can help you achieve your
-            business goals. Let’s build the future of hospitality together.
-          </p>
+{/* Contact Section */}
+<section id="contact" className="py-16 bg-gray-50">
+      {/* Section Title */}
+      <div
+        className="container mx-auto px-4 text-center mb-12"
+        data-aos="fade-up"
+      >
+        <h2 className="text-3xl font-bold text-gray-800 mt-2">
+          Contact us today
+        </h2>
+        <p className="text-gray-600 mt-4">
+          Schedule a demo or learn more about how we can help you achieve your
+          business goals. Let’s build the future of hospitality together.
+        </p>
+      </div>
+      {/* End Section Title */}
+
+      <div className="container mx-auto px-4">
+        <div className="flex flex-wrap justify-center -mx-4">
+          {/* Address */}
+          <motion.div
+            className="w-full md:w-1/2 lg:w-1/3 px-4 mb-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={cardVariants}
+          >
+            <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow duration-300">
+              <motion.div
+                className="flex justify-center mb-4"
+                whileHover="hover"
+                variants={iconVariants}
+              >
+                <div className="bg-blue-100 rounded-full p-4">
+                  <MapPinIcon className="text-blue-500 h-10 w-10" />
+                </div>
+              </motion.div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Address</h3>
+              <p className="text-gray-600">
+                Addis Abeba, Bole, Atlas Main Road
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Call Us */}
+          <motion.div
+            className="w-full md:w-1/2 lg:w-1/3 px-4 mb-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={cardVariants}
+            transition={{ delay: 0.2 }}
+          >
+            <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow duration-300">
+              <motion.div
+                className="flex justify-center mb-4"
+                whileHover="hover"
+                variants={iconVariants}
+              >
+                <div className="bg-blue-100 rounded-full p-4">
+                  <PhoneIcon className="text-blue-500 h-10 w-10" />
+                </div>
+              </motion.div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Call Us</h3>
+              <p className="text-gray-600">+2 5192 4384 865</p>
+            </div>
+          </motion.div>
+
+          {/* Email Us */}
+          <motion.div
+            className="w-full md:w-1/2 lg:w-1/3 px-4 mb-8"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={cardVariants}
+            transition={{ delay: 0.4 }}
+          >
+            <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow duration-300">
+              <motion.div
+                className="flex justify-center mb-4"
+                whileHover="hover"
+                variants={iconVariants}
+              >
+                <div className="bg-blue-100 rounded-full p-4">
+                  <EnvelopeIcon className="text-blue-500 h-10 w-10" />
+                </div>
+              </motion.div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Email Us</h3>
+              <p className="text-gray-600">tatitaye0@gmail.com</p>
+              <p className="text-gray-600">betelhembelete0@gmail.com</p>
+            </div>
+          </motion.div>
         </div>
-        {/* End Section Title */}
+      </div>
+    </section>
 
-        <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-center -mx-4">
-            {/* Address */}
-            <div
-              className="w-full md:w-1/2 lg:w-1/3 px-4 mb-8"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow duration-300">
-                <i className="bi bi-geo-alt text-blue-500 text-4xl mb-4"></i>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">
-                  Address
-                </h3>
-                <p className="text-gray-600">
-                  Addis Abeba, Bole, Atlas Main Road
-                </p>
-              </div>
-            </div>
-
-            {/* Call Us */}
-            <div
-              className="w-full md:w-1/2 lg:w-1/3 px-4 mb-8"
-              data-aos="fade-up"
-              data-aos-delay="300"
-            >
-              <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow duration-300">
-                <i className="bi bi-telephone text-blue-500 text-4xl mb-4"></i>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">
-                  Call Us
-                </h3>
-                <p className="text-gray-600">+2 5192 4384 865</p>
-              </div>
-            </div>
-
-            {/* Email Us */}
-            <div
-              className="w-full md:w-1/2 lg:w-1/3 px-4 mb-8"
-              data-aos="fade-up"
-              data-aos-delay="400"
-            >
-              <div className="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-lg transition-shadow duration-300">
-                <i className="bi bi-envelope text-blue-500 text-4xl mb-4"></i>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">
-                  Email Us
-                </h3>
-                <p className="text-gray-600">tatitaye0@gmail.com</p>
-                <p className="text-gray-600">betelhembelete0@gmail.com</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       {/* Call To Action Section */}
         <Footer />
     </>
