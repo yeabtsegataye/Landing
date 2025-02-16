@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import verifyToken from "./middleware/verifiToken";
 import { Checkout } from "./Pages/CheckOut";
 import { Home } from "./Pages/Home";
+import { Payment } from "./Pages/Payment";
 
 function App() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -37,6 +38,8 @@ function App() {
           element={isVerified ? <Checkout /> : <Login />}
         />
         <Route path="/login" element={<Login />} />
+        <Route path="/payment_processing" element={<Payment />} />
+
         <Route path="/signup" element={<Signup />} />
       </Routes>
     </>

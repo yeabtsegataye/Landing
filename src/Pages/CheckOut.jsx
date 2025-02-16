@@ -20,7 +20,7 @@ export const Checkout = () => {
   const handle_payment = async () => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/create_chapa`,  // Use the env variable here
+        `${import.meta.env.VITE_API_URL}/payment/create_chapa`,  // Use the env variable here
         {
           packeg_id: id,
           user_id: user.id,
@@ -33,7 +33,7 @@ export const Checkout = () => {
         }
       );
   
-      console.log(response);
+      console.log(response, "my response");
       window.location.href = response.data.data.checkout_url;;
     } catch (error) {
       console.error("Payment request failed:", error);
