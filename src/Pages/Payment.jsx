@@ -6,38 +6,40 @@ import { useSelector } from 'react-redux';
 export const Payment = () => {
   const [status, setStatus] = useState('processing'); // 'processing', 'success', 'failed'
   const [txRef, setTxRef] = useState(''); // Store the tx_ref value
-  const [user_id, SetUser_id] = useState()
-  const [packeg_id, SetPackeg_id] = useState()
+  const [user_id, setUser_id] = useState('');
+  const [packeg_id, setPackeg_id] = useState('');
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
-    // Extract tx_ref from the URL query parameters
+    // Extract query parameters from the URL
     const queryParams = new URLSearchParams(window.location.search);
     const txRefFromUrl = queryParams.get('tx_ref');
     const uid = queryParams.get('user_id');
-    const pid = queryParams.get('packeg_id')
-    
-    SetUser_id(uid);
-    SetPackeg_id(pid);
-    setTxRef(txRefFromUrl || ''); // Set the tx_ref value
+    const pid = queryParams.get('packeg_id');
 
-    console.log(user_id, packeg_id,txRef,'101010')
-
-    // Simulate payment processing
-    const timer = setTimeout(() => {
-      // Send a request to verify payment status
-      console.log(txRef,'qeryyy')
-      verifyPaymentStatus(txRef);
-    }, 5000); // 5 seconds delay
-
-    return () => clearTimeout(timer);
+    // Update state with query parameters
+    setTxRef(txRefFromUrl || '');
+    setUser_id(uid || '');
+    setPackeg_id(pid || '');
   }, []);
 
-  const verifyPaymentStatus = async (txRef) => {
+  useEffect(() => {
+    // Verify payment status only after state has been updated
+    if (txRef && user_id && packeg_id) {
+      console.log(user_id, packeg_id, txRef, '101010'); // Log updated values
+      const timer = setTimeout(() => {
+        verifyPaymentStatus(txRef, user_id, packeg_id);
+      }, 5000); // 5 seconds delay
+
+      return () => clearTimeout(timer);
+    }
+  }, [txRef, user_id, packeg_id]); // Run this effect when state changes
+
+  const verifyPaymentStatus = async (txRef, user_id, packeg_id) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/payment/processing`,
-        { tx_ref: txRef ,user_id,packeg_id }, // Send tx_ref in the request body
+        { tx_ref: txRef, user_id, packeg_id }, // Send tx_ref, user_id, and packeg_id in the request body
         {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token in the headers
@@ -45,7 +47,9 @@ export const Payment = () => {
           withCredentials: true, // Include credentials (cookies) in the request
         }
       );
-console.log('responce', response)
+
+      console.log('response', response);
+
       // Update status based on the response
       if (response.data.success) {
         setStatus('success');
