@@ -54,7 +54,7 @@ export const Payment = () => {
         }
       );
 
-    //   console.log('response', response);
+     console.log('response', response);
 
       // Update status based on the response
       if (response.data.data== 'success') {
