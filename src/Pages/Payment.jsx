@@ -11,17 +11,22 @@ export const Payment = () => {
   const token = useSelector((state) => state.auth.token);
 
   useEffect(() => {
-    // Extract query parameters from the URL
-    const queryParams = new URLSearchParams(window.location.search);
+    // Replace &amp; with & to properly parse query parameters
+    const fixedUrl = window.location.search.replace(/&amp;/g, '&');
+    const queryParams = new URLSearchParams(fixedUrl);
+    
     const txRefFromUrl = queryParams.get('tx_ref');
     const uid = queryParams.get('user_id');
     const pid = queryParams.get('packeg_id');
-console.log(uid, pid, txRefFromUrl, '3333')
+    
+    console.log(uid, pid, txRefFromUrl, '3333');
+    
     // Update state with query parameters
     setTxRef(txRefFromUrl || '');
     setUser_id(uid || '');
     setPackeg_id(pid || '');
   }, []);
+  
 
   useEffect(() => {
     // Verify payment status only after state has been updated
@@ -32,6 +37,9 @@ console.log(uid, pid, txRefFromUrl, '3333')
       }, 5000); // 5 seconds delay
 
       return () => clearTimeout(timer);
+    }
+    else {
+        setStatus('failed');
     }
   }, [txRef, user_id, packeg_id]); // Run this effect when state changes
 
