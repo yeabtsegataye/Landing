@@ -18,6 +18,7 @@ export const Nav = () => {
   }, [reduxUser]);
 
   const handleLogout = async (e) => {
+    console.log('loging out')
     e.preventDefault();
     removeCookie("refresh_token");
 
@@ -29,7 +30,7 @@ export const Nav = () => {
           withCredentials: true,
         }
       );
-
+      console.log(response)
       if (response.status === 201) {
         dispatch(logOut());
         navigate("/Login");
