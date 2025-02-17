@@ -16,7 +16,7 @@ export const Payment = () => {
     const txRefFromUrl = queryParams.get('tx_ref');
     const uid = queryParams.get('user_id');
     const pid = queryParams.get('packeg_id');
-
+console.log(uid, pid, txRefFromUrl, '3333')
     // Update state with query parameters
     setTxRef(txRefFromUrl || '');
     setUser_id(uid || '');
