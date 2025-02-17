@@ -5,6 +5,7 @@ import removeCookie from "../auth/removeCookie";
 import { logOut } from "../features/auth/authSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useLogoutMutation } from "../features/auth/authApiSlice";
 
 export const Nav = () => {
   const [user, setUser] = useState(null); 
@@ -12,6 +13,7 @@ export const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for mobile menu
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [logout] = useLogoutMutation();
 
   useEffect(() => {
     setUser(reduxUser);
@@ -20,23 +22,24 @@ export const Nav = () => {
   const handleLogout = async (e) => {
     console.log('loging out')
     e.preventDefault();
-    removeCookie("refresh_token");
-
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auth/log-out`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(response)
-      if (response.status === 201) {
-        dispatch(logOut());
-        navigate("/Login");
-      } else {
-        console.error("Failed to log out");
-      }
+      // const response = await axios.post(
+      //   `${import.meta.env.VITE_API_URL}/auth/log-out`,
+      //   {},
+      //   {
+      //     withCredentials: true,
+      //   }
+      // ); 
+      const response = await logout()
+      dispatch(logOut());
+      console.log(response,'logout resp')
+
+      navigate("/");
+      // if (response.status === 201) {
+      
+      // } else {
+      //   console.error("Failed to log out");
+      // }
     } catch (error) {
       console.error("Error logging out:", error);
     }
