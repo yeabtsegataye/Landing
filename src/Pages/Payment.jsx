@@ -59,6 +59,8 @@ export const Payment = () => {
       // Update status based on the response
       if (response.data.data== 'success') {
         setStatus('success');
+        window.location.href = response.data.data.redirectUrl;
+
       } else {
         setStatus('failed');
       }
