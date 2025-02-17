@@ -31,18 +31,16 @@ export const Payment = () => {
   useEffect(() => {
     // Verify payment status only after state has been updated
     if (txRef && user_id && packeg_id) {
-      console.log(user_id, packeg_id, txRef, '101010'); // Log updated values
+    //   console.log(user_id, packeg_id, txRef, '101010'); // Log updated values
       const timer = setTimeout(() => {
         verifyPaymentStatus(txRef, user_id, packeg_id);
       }, 5000); // 5 seconds delay
 
       return () => clearTimeout(timer);
     }
-    else {
-        setStatus('failed');
-    }
   }, [txRef, user_id, packeg_id]); // Run this effect when state changes
 
+///////////////////////
   const verifyPaymentStatus = async (txRef, user_id, packeg_id) => {
     try {
       const response = await axios.post(
@@ -56,7 +54,7 @@ export const Payment = () => {
         }
       );
 
-      console.log('response', response);
+    //   console.log('response', response);
 
       // Update status based on the response
       if (response.data.data== 'success') {
