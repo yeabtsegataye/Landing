@@ -111,7 +111,7 @@ export const Home = () => {
               </p>
               <div className="flex space-x-4">
                 <a
-                  href="#about"
+                  href="#pricing"
                   className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
                 >
                   Get Started
