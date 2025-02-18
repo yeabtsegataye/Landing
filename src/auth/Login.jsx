@@ -5,7 +5,7 @@ import CryptoJS from "crypto-js";
 import { useLoginMutation } from "../features/auth/authApiSlice";
 import { setCredentials } from "../features/auth/authSlice";
 import { useToast } from "@chakra-ui/react";
-import Notif_Toast from "../components/Tost";
+import Notif_Toast from "../Components/Tost";
 import LoginImage from "../assets/Login2.png"; // Import your image from assets
 import { ClipLoader } from "react-spinners"; // Import the spinner component
 
@@ -55,16 +55,25 @@ function Login() {
         }).unwrap();
         if (userData) {
           dispatch(setCredentials(userData));
-          Notif_Toast(
-            toast,
-            "Login successful",
-            "You have successfully logged in",
-            "success"
-          );
+          toast({
+            title: "Login successful",
+            description: "You have successfully Logged in",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+          });
           navigate("/");
         }
       } catch (error) {
-        Notif_Toast(toast, "Error logging in", error.data?.message, "error");
+        toast({
+          title: "Error Logging in",
+          description: error.data?.message || "An unexpected error occurred",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
       } finally {
         setIsLoading(false); // Set loading to false after the request is complete
       }
