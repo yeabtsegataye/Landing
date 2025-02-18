@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import CryptoJS from "crypto-js";
 import { useNavigate } from "react-router-dom";
-// import { useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import { useSignupMutation } from "../features/auth/authApiSlice";
 import SignupImage from "../assets/Signup.png"; // Import your image from assets
+import { ClipLoader } from "react-spinners"; // Import the spinner component
 
 const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
 
 export const Signup = () => {
   const navigate = useNavigate();
-  // const toast = useToast();
+  const toast = useToast();
   const [signup] = useSignupMutation();
 
   const [formData, setFormData] = useState({
@@ -21,6 +22,7 @@ export const Signup = () => {
 
   const [formErrors, setFormErrors] = useState({});
   const [formValid, setFormValid] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,6 +61,7 @@ export const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formValid) {
+      setIsLoading(true); // Set loading to true when submitting
       try {
         const encryptedPassword = CryptoJS.AES.encrypt(
           formData.password,
@@ -70,26 +73,28 @@ export const Signup = () => {
         };
         const response = await signup(encryptedFormData).unwrap();
         if (response.accessToken) {
-          // toast({
-          //   title: "Signup successful",
-          //   description: "You have successfully signed up",
-          //   status: "success",
-          //   duration: 5000,
-          //   isClosable: true,
-          //   position: "bottom",
-          // });
+          toast({
+            title: "Signup successful",
+            description: "You have successfully signed up",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom",
+          });
           navigate("/");
         }
       } catch (error) {
-        // toast({
-        //   title: "Error signing up",
-        //   description: error.data?.message || "An unexpected error occurred",
-        //   status: "error",
-        //   duration: 5000,
-        //   isClosable: true,
-        //   position: "bottom",
-        // });
+        toast({
+          title: "Error signing up",
+          description: error.data?.message || "An unexpected error occurred",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
         console.error("Signup error", error);
+      } finally {
+        setIsLoading(false); // Set loading to false after the request is complete
       }
     }
   };
@@ -195,10 +200,14 @@ export const Signup = () => {
 
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-              disabled={!formValid}
+              className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all flex items-center justify-center"
+              disabled={!formValid || isLoading}
             >
-              Sign Up
+              {isLoading ? (
+                <ClipLoader color="#ffffff" size={20} /> // Show spinner when loading
+              ) : (
+                "Sign Up" // Show "Sign Up" text when not loading
+              )}
             </button>
 
             <div className="text-center mt-4">

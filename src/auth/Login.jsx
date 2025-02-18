@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import CryptoJS from "crypto-js";
 import { useLoginMutation } from "../features/auth/authApiSlice";
 import { setCredentials } from "../features/auth/authSlice";
-// import { useToast } from "@chakra-ui/react";
-// import Notif_Toast from "../components/Tost";
+import { useToast } from "@chakra-ui/react";
+import Notif_Toast from "../components/Tost";
 import LoginImage from "../assets/Login2.png"; // Import your image from assets
+import { ClipLoader } from "react-spinners"; // Import the spinner component
 
 const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
 
@@ -15,7 +16,8 @@ function Login() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [formValid, setFormValid] = useState(false);
-  // const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const toast = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [login] = useLoginMutation();
@@ -39,6 +41,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formValid) {
+      setIsLoading(true); // Set loading to true when submitting
       try {
         // Encrypt the password
         const encryptedPassword = CryptoJS.AES.encrypt(
@@ -51,19 +54,19 @@ function Login() {
           Password: encryptedPassword,
         }).unwrap();
         if (userData) {
-          // console.log(userData,'from login')
           dispatch(setCredentials(userData));
-          // Notif_Toast(
-          //   toast,
-          //   "Login successful",
-          //   "You have successfully logged in",
-          //   "success"
-          // );
-
+          Notif_Toast(
+            toast,
+            "Login successful",
+            "You have successfully logged in",
+            "success"
+          );
           navigate("/");
         }
       } catch (error) {
-        // Notif_Toast(toast, "Error logging in", error.data?.message, "error");
+        Notif_Toast(toast, "Error logging in", error.data?.message, "error");
+      } finally {
+        setIsLoading(false); // Set loading to false after the request is complete
       }
     }
   };
@@ -137,10 +140,14 @@ function Login() {
 
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-              disabled={!formValid}
+              className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all flex items-center justify-center"
+              disabled={!formValid || isLoading}
             >
-              Log In
+              {isLoading ? (
+                <ClipLoader color="#ffffff" size={20} /> // Show spinner when loading
+              ) : (
+                "Log In" // Show "Log In" text when not loading
+              )}
             </button>
 
             <div className="text-center mt-4">

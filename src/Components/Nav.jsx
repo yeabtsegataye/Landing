@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logOut } from "../features/auth/authSlice";
 import { useLogoutMutation } from "../features/auth/authApiSlice";
+import { useToast } from "@chakra-ui/react";
 
 export const Nav = () => {
   const [user, setUser] = useState(null);
@@ -11,6 +12,7 @@ export const Nav = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [logout] = useLogoutMutation();
+  const toast = useToast();
 
   useEffect(() => {
     setUser(reduxUser);
@@ -24,18 +26,24 @@ export const Nav = () => {
       navigate("/Login");
     } catch (error) {
       console.error("Error logging out:", error);
+      toast({
+        title: "Error loging out",
+        description: error.data?.message || "An unexpected error occurred",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     }
   };
-
   return (
     <header className="bg-white shadow-md fixed top-0 left-0 w-full z-10">
       <div className="container mx-auto flex justify-between items-center p-4">
         <Link to="/" className="text-2xl font-bold text-gray-800">
           REVE
         </Link>
-
         {/* Desktop Menu */}
-        <nav className="hidden md:flex space-x-6">
+        <nav className="hidden md:flex space-x-6 justify-center">
           <a href="#hero" className="text-gray-600 hover:text-blue-500">
             Home
           </a>
@@ -53,6 +61,9 @@ export const Nav = () => {
           </a>
           <a href="#contact" className="text-gray-600 hover:text-blue-500">
             Contact
+          </a>
+          <a href="https://hotel-main-dashboard.onrender.com" className="text-gray-600 hover:text-blue-500">
+            Dashboard
           </a>
           {user?.id ? (
             <button
@@ -139,6 +150,15 @@ export const Nav = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Contact
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://hotel-main-dashboard.onrender.com"
+              className="block text-gray-600 hover:text-blue-500"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Dashboard
             </a>
           </li>
           <li>
