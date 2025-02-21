@@ -41,6 +41,16 @@ export const authApiSlice = apiSlice.injectEndpoints({
         },
         credentials: 'include'
       })
+    }),
+    package: builder.mutation({
+      query: ({ token }) => ({
+        url: '/packeage/get',
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        credentials: 'include'
+      })
     })
   })
 })
@@ -50,5 +60,6 @@ export const {
   useSignupMutation,
   useRefreshMutation,
   useVerifyTokenMutation,
-  useLogoutMutation
+  useLogoutMutation,
+  usePackageMutation
 } = authApiSlice;

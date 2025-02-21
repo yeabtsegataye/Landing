@@ -43,7 +43,7 @@ export const Nav = () => {
           REVE
         </Link>
         {/* Desktop Menu */}
-        <nav className="hidden md:flex space-x-6 justify-center">
+        <nav className="hidden md:flex space-x-6 items-center">
           <a href="#hero" className="text-gray-600 hover:text-blue-500">
             Home
           </a>

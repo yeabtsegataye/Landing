@@ -1,18 +1,21 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useLoginMutation } from "../features/auth/authApiSlice";
+import Lottie from "lottie-react"; // Import Lottie
+import burgerChefAnimation from "../assets/delivery-team.json"; // Import the animation JSON file
+import testAnimation from "../assets/test-animation.json"; // Fallback animation
 
 export const Pricing = () => {
   const [pricingPlans, setPricingPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [packeage] = useLoginMutation();
 
   const fetchPricingPlans = async () => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/packeage/get`
-      );
+      const response = await packeage();
       setPricingPlans(response.data);
+      console.log(pricingPlans, "ress");
       setLoading(false);
     } catch (err) {
       console.log(err);
@@ -24,6 +27,32 @@ export const Pricing = () => {
   useEffect(() => {
     fetchPricingPlans();
   }, []);
+
+  // Loading Animation
+  if (loading) {
+    console.log("Animation Data:", burgerChefAnimation); // Debugging log
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+        <div className="w-64 h-64 border border-red-500">
+          <Lottie
+            animationData={burgerChefAnimation || testAnimation} // Fallback to test animation
+            loop={true}
+          />
+        </div>
+        <p className="mt-4 text-lg text-gray-700">Loading pricing plans...</p>
+      </div>
+    );
+  }
+
+  // Error Message
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+        <p className="text-red-500 text-lg">{error}</p>
+      </div>
+    );
+  }
+
   return (
     <section id="pricing" className="pricing section light-background">
       {/* Section Title */}
