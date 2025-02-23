@@ -5,6 +5,8 @@ import { useToast } from "@chakra-ui/react";
 import { useSignupMutation } from "../features/auth/authApiSlice";
 import SignupImage from "../assets/Signup.png"; // Import your image from assets
 import { ClipLoader } from "react-spinners"; // Import the spinner component
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../features/auth/authSlice";
 
 const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
 
@@ -12,12 +14,15 @@ export const Signup = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const [signup] = useSignupMutation();
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     passwordConfirm: "",
+    hotel_name: "",
+    hotel_description: "",
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -35,7 +40,7 @@ export const Signup = () => {
 
     switch (name) {
       case "email":
-        errors.email = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)
+        errors.email = value.match(/^([\w.%+-]+)@([\w-]{2,}\.)+([\w]{2,})$/i)
           ? ""
           : "Email is invalid";
         break;
@@ -67,12 +72,18 @@ export const Signup = () => {
           formData.password,
           SECRET_KEY
         ).toString();
+
+        // Include hotel_name and hotel_description in the request payload
         const encryptedFormData = {
           ...formData,
           Password: encryptedPassword,
         };
+
         const response = await signup(encryptedFormData).unwrap();
+
         if (response.accessToken) {
+          dispatch(setCredentials(response));
+          
           toast({
             title: "Signup successful",
             description: "You have successfully signed up",
@@ -86,7 +97,7 @@ export const Signup = () => {
       } catch (error) {
         toast({
           title: "Error signing up",
-          description: error.data?.message || "An unexpected error occurred",
+          description: error.data || "An unexpected error occurred",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -114,88 +125,181 @@ export const Signup = () => {
         {/* Form Section */}
         <div className="w-full md:w-1/2 p-8">
           <div className="text-center mb-6">
-            <h2 className="text-3xl font-bold text-gray-800">Create New Account</h2>
+            <h2 className="text-3xl font-bold text-gray-800">
+              Create New Account
+            </h2>
             <p className="text-gray-600">Join us and start your journey</p>
           </div>
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                Name
-              </label>
-              <input
-                type="text"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
-                  formErrors.name ? "border-red-500" : formData.name && "border-green-500"
-                }`}
-                id="name"
-                name="name"
-                placeholder="Enter your name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-              {formErrors.name && <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>}
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Name and Father Name */}
+              <div className="mb-4">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Name
+                </label>
+                <input
+                  type="text"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                    formErrors.name
+                      ? "border-red-500"
+                      : formData.name && "border-green-500"
+                  }`}
+                  id="name"
+                  name="name"
+                  placeholder="Enter your name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.name && (
+                  <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
+                )}
+              </div>
 
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
-              </label>
-              <input
-                type="email"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
-                  formErrors.email ? "border-red-500" : formData.email && "border-green-500"
-                }`}
-                id="email"
-                name="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-              {formErrors.email && <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>}
-            </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="fatherName"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Father Name
+                </label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  id="fatherName"
+                  name="fatherName"
+                  placeholder="Enter your father's name"
+                  value={formData.fatherName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-            <div className="mb-4">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
-                  formErrors.password ? "border-red-500" : formData.password && "border-green-500"
-                }`}
-                id="password"
-                name="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-              {formErrors.password && (
-                <p className="text-red-500 text-sm mt-1">{formErrors.password}</p>
-              )}
-            </div>
+              {/* Email and Password */}
+              <div className="mb-4">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                    formErrors.email
+                      ? "border-red-500"
+                      : formData.email && "border-green-500"
+                  }`}
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.email && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {formErrors.email}
+                  </p>
+                )}
+              </div>
 
-            <div className="mb-6">
-              <label htmlFor="passwordConfirm" className="block text-sm font-medium text-gray-700 mb-2">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
-                  formErrors.passwordConfirm ? "border-red-500" : formData.passwordConfirm && "border-green-500"
-                }`}
-                id="passwordConfirm"
-                name="passwordConfirm"
-                placeholder="Confirm your password"
-                value={formData.passwordConfirm}
-                onChange={handleChange}
-                required
-              />
-              {formErrors.passwordConfirm && (
-                <p className="text-red-500 text-sm mt-1">{formErrors.passwordConfirm}</p>
-              )}
+              <div className="mb-4">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Password
+                </label>
+                <input
+                  type="password"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                    formErrors.password
+                      ? "border-red-500"
+                      : formData.password && "border-green-500"
+                  }`}
+                  id="password"
+                  name="password"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.password && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {formErrors.password}
+                  </p>
+                )}
+              </div>
+
+              {/* Confirm Password */}
+              <div className="mb-4">
+                <label
+                  htmlFor="passwordConfirm"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                    formErrors.passwordConfirm
+                      ? "border-red-500"
+                      : formData.passwordConfirm && "border-green-500"
+                  }`}
+                  id="passwordConfirm"
+                  name="passwordConfirm"
+                  placeholder="Confirm your password"
+                  value={formData.passwordConfirm}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.passwordConfirm && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {formErrors.passwordConfirm}
+                  </p>
+                )}
+              </div>
+              {/* Hotel Name and Hotel Description */}
+              <div className="mb-4">
+                <label
+                  htmlFor="hotel_name"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Hotel Name
+                </label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  id="hotel_name"
+                  name="hotel_name"
+                  placeholder="Enter your hotel name"
+                  value={formData.hotel_name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="hotel_description"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Hotel Description
+                </label>
+                <textarea
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  id="hotel_description"
+                  name="hotel_description"
+                  placeholder="Enter your hotel description"
+                  value={formData.hotel_description}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
 
             <button

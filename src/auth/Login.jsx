@@ -33,7 +33,7 @@ function Login() {
   };
 
   const validateEmail = (value) => {
-    const emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+    const emailValid = value.match(/^([\w.%+-]+)@([\w-]{2,}\.)+([\w]{2,})$/i);
     setEmailError(emailValid ? "" : "Email is invalid");
     setFormValid(emailValid);
   };
