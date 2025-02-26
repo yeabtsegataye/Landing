@@ -66,9 +66,10 @@ function Login() {
           navigate("/");
         }
       } catch (error) {
+        console.log(error,'eee')
         toast({
           title: "Error Logging in",
-          description: error.data?.message || "An unexpected error occurred",
+          description: error.data || "An unexpected error occurred",
           status: "error",
           duration: 5000,
           isClosable: true,

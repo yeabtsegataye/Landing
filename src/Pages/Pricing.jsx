@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLoginMutation } from "../features/auth/authApiSlice";
-import Lottie from "lottie-react"; // Import Lottie
 import burgerChefAnimation from "../assets/delivery-team.json"; // Import the animation JSON file
-import testAnimation from "../assets/test-animation.json"; // Fallback animation
 
 export const Pricing = () => {
   const [pricingPlans, setPricingPlans] = useState([]);
@@ -28,17 +26,12 @@ export const Pricing = () => {
     fetchPricingPlans();
   }, []);
 
-  // Loading Animation
   if (loading) {
     console.log("Animation Data:", burgerChefAnimation); // Debugging log
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-        <div className="w-64 h-64 border border-red-500">
-          <Lottie
-            animationData={burgerChefAnimation || testAnimation} // Fallback to test animation
-            loop={true}
-          />
-        </div>
+        {/* Rolling Loading Spinner */}
+        <div className="w-12 h-12 border-4 border-gray-300 border-t-4 border-t-blue-500 rounded-full animate-spin"></div>
         <p className="mt-4 text-lg text-gray-700">Loading pricing plans...</p>
       </div>
     );

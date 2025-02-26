@@ -23,15 +23,15 @@ export const Payment = () => {
     
     // Update state with query parameters
     setTxRef(txRefFromUrl || '');
-    setUser_id(uid || '');
-    setPackeg_id(pid || '');
+    setUser_id(Number(uid) || '');
+    setPackeg_id(Number(pid) || '');
   }, []);
   
 
   useEffect(() => {
     // Verify payment status only after state has been updated
     if (txRef && user_id && packeg_id) {
-    //   console.log(user_id, packeg_id, txRef, '101010'); // Log updated values
+      console.log(user_id, packeg_id, txRef, '101010'); // Log updated values
       const timer = setTimeout(() => {
         verifyPaymentStatus(txRef, user_id, packeg_id);
       }, 5000); // 5 seconds delay
@@ -42,6 +42,8 @@ export const Payment = () => {
 
 ///////////////////////
   const verifyPaymentStatus = async (txRef, user_id, packeg_id) => {
+    console.log('tati')
+    console.log(txRef, user_id, packeg_id)
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/payment/processing`,

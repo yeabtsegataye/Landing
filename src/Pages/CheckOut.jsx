@@ -21,11 +21,12 @@ export const Checkout = () => {
 
   const handle_payment = async () => {
     setIsProcessing(true); // Start spinner
+    console.log(user.id,id)
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/payment/create_chapa`,
         {
-          packeg_id: id,
+          packeg_id: Number(id),
           user_id: user.id,
         },
         {
