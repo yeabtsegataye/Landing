@@ -97,7 +97,7 @@ export const Signup = () => {
       } catch (error) {
         toast({
           title: "Error signing up",
-          description: error.data || "An unexpected error occurred",
+          description: error?.data ||error?.data?.message || "An unexpected error occurred",
           status: "error",
           duration: 5000,
           isClosable: true,

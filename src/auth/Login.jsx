@@ -69,7 +69,7 @@ function Login() {
         console.log(error,'eee')
         toast({
           title: "Error Logging in",
-          description: error.data || "An unexpected error occurred",
+          description: error?.data || error?.data?.message ||"An unexpected error occurred",
           status: "error",
           duration: 5000,
           isClosable: true,
