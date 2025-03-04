@@ -8,6 +8,7 @@ import verifyToken from "./middleware/verifiToken";
 import { Checkout } from "./Pages/CheckOut";
 import { Home } from "./Pages/Home";
 import { Payment } from "./Pages/Payment";
+import ForgotPassword from "./auth/Forget_password";
 
 function App() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -41,6 +42,7 @@ function App() {
         <Route path="/payment_processing" element={<Payment />} />
 
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot_password" element={<ForgotPassword />} />
       </Routes>
     </>
   );

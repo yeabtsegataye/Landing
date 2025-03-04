@@ -69,7 +69,7 @@ function Login() {
         console.log(error,'eee')
         toast({
           title: "Error Logging in",
-          description: error?.data || error?.data?.message ||"An unexpected error occurred",
+          description:  error?.data?.message ||error?.data ||"An unexpected error occurred",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -132,7 +132,7 @@ function Login() {
                 required
               />
               <div className="text-right mt-2">
-                <a href="/forgot-password" className="text-sm text-blue-500 hover:underline">
+                <a href="/forgot_password" className="text-sm text-blue-500 hover:underline">
                   Forgot Password?
                 </a>
               </div>
