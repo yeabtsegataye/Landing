@@ -3,8 +3,8 @@ import CryptoJS from "crypto-js";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import { useSignupMutation } from "../features/auth/authApiSlice";
-import SignupImage from "../assets/Signup.png"; // Import your image from assets
-import { ClipLoader } from "react-spinners"; // Import the spinner component
+import SignupImage from "../assets/Signup.png";
+import { ClipLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../features/auth/authSlice";
 
@@ -17,17 +17,19 @@ export const Signup = () => {
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     passwordConfirm: "",
     hotel_name: "",
     hotel_description: "",
+    phone: ""
   });
 
   const [formErrors, setFormErrors] = useState({});
   const [formValid, setFormValid] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,6 +41,12 @@ export const Signup = () => {
     let errors = formErrors;
 
     switch (name) {
+      case "firstName":
+        errors.firstName = value.trim() ? "" : "First name is required";
+        break;
+      case "lastName":
+        errors.lastName = value.trim() ? "" : "Last name is required";
+        break;
       case "email":
         errors.email = value.match(/^([\w.%+-]+)@([\w-]{2,}\.)+([\w]{2,})$/i)
           ? ""
@@ -55,28 +63,43 @@ export const Signup = () => {
         errors.passwordConfirm =
           value === formData.password ? "" : "Passwords do not match";
         break;
+      case "phone":
+        errors.phone = value.match(/^[0-9]{10,15}$/)
+          ? ""
+          : "Phone number must be 10-15 digits";
+        break;
       default:
         break;
     }
 
     setFormErrors(errors);
-    setFormValid(!Object.values(errors).some((error) => error.length > 0));
+    
+    // Check if all required fields are filled and valid
+    const requiredFields = ['firstName', 'lastName', 'email', 'password', 'passwordConfirm', 'hotel_name', 'hotel_description', 'phone'];
+    const allFieldsFilled = requiredFields.every(field => formData[field] && formData[field].trim() !== '');
+    const noErrors = !Object.values(errors).some(error => error && error.length > 0);
+    
+    setFormValid(allFieldsFilled && noErrors);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formValid) {
-      setIsLoading(true); // Set loading to true when submitting
+      setIsLoading(true);
       try {
         const encryptedPassword = CryptoJS.AES.encrypt(
           formData.password,
           SECRET_KEY
         ).toString();
 
-        // Include hotel_name and hotel_description in the request payload
         const encryptedFormData = {
-          ...formData,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
           Password: encryptedPassword,
+          phone: formData.phone,
+          hotel_name: formData.hotel_name,
+          hotel_description: formData.hotel_description
         };
 
         const response = await signup(encryptedFormData).unwrap();
@@ -97,7 +120,7 @@ export const Signup = () => {
       } catch (error) {
         toast({
           title: "Error signing up",
-          description: error?.data ||error?.data?.message || "An unexpected error occurred",
+          description: error?.data || error?.data?.message || "An unexpected error occurred",
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -105,7 +128,7 @@ export const Signup = () => {
         });
         console.error("Signup error", error);
       } finally {
-        setIsLoading(false); // Set loading to false after the request is complete
+        setIsLoading(false);
       }
     }
   };
@@ -113,7 +136,7 @@ export const Signup = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-sky-100 to-sky-200 p-4">
       <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden flex flex-col md:flex-row">
-        {/* Image Section - Hidden on small screens */}
+        {/* Image Section */}
         <div className="hidden md:block w-full md:w-1/2 bg-blue-50 flex items-center justify-center p-8">
           <img
             src={SignupImage}
@@ -132,50 +155,57 @@ export const Signup = () => {
           </div>
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Name and Father Name */}
+              {/* First Name and Last Name */}
               <div className="mb-4">
                 <label
-                  htmlFor="name"
+                  htmlFor="firstName"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Name
+                  First Name
                 </label>
                 <input
                   type="text"
                   className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
-                    formErrors.name
+                    formErrors.firstName
                       ? "border-red-500"
-                      : formData.name && "border-green-500"
+                      : formData.firstName && "border-green-500"
                   }`}
-                  id="name"
-                  name="name"
-                  placeholder="Enter your name"
-                  value={formData.name}
+                  id="firstName"
+                  name="firstName"
+                  placeholder="Enter your first name"
+                  value={formData.firstName}
                   onChange={handleChange}
                   required
                 />
-                {formErrors.name && (
-                  <p className="text-red-500 text-sm mt-1">{formErrors.name}</p>
+                {formErrors.firstName && (
+                  <p className="text-red-500 text-sm mt-1">{formErrors.firstName}</p>
                 )}
               </div>
 
               <div className="mb-4">
                 <label
-                  htmlFor="fatherName"
+                  htmlFor="lastName"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Father Name
+                  Last Name
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                  id="fatherName"
-                  name="fatherName"
-                  placeholder="Enter your father's name"
-                  value={formData.fatherName}
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                    formErrors.lastName
+                      ? "border-red-500"
+                      : formData.lastName && "border-green-500"
+                  }`}
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Enter your last name"
+                  value={formData.lastName}
                   onChange={handleChange}
                   required
                 />
+                {formErrors.lastName && (
+                  <p className="text-red-500 text-sm mt-1">{formErrors.lastName}</p>
+                )}
               </div>
 
               {/* Email and Password */}
@@ -263,6 +293,7 @@ export const Signup = () => {
                   </p>
                 )}
               </div>
+
               {/* Hotel Name and Hotel Description */}
               <div className="mb-4">
                 <label
@@ -273,7 +304,11 @@ export const Signup = () => {
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                    formErrors.hotel_name
+                      ? "border-red-500"
+                      : formData.hotel_name && "border-green-500"
+                  }`}
                   id="hotel_name"
                   name="hotel_name"
                   placeholder="Enter your hotel name"
@@ -281,6 +316,9 @@ export const Signup = () => {
                   onChange={handleChange}
                   required
                 />
+                {formErrors.hotel_name && (
+                  <p className="text-red-500 text-sm mt-1">{formErrors.hotel_name}</p>
+                )}
               </div>
 
               <div className="mb-4">
@@ -291,7 +329,11 @@ export const Signup = () => {
                   Hotel Description
                 </label>
                 <textarea
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                    formErrors.hotel_description
+                      ? "border-red-500"
+                      : formData.hotel_description && "border-green-500"
+                  }`}
                   id="hotel_description"
                   name="hotel_description"
                   placeholder="Enter your hotel description"
@@ -299,18 +341,51 @@ export const Signup = () => {
                   onChange={handleChange}
                   required
                 />
+                {formErrors.hotel_description && (
+                  <p className="text-red-500 text-sm mt-1">{formErrors.hotel_description}</p>
+                )}
+              </div>
+
+              {/* Phone Number */}
+              <div className="mb-4">
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${
+                    formErrors.phone
+                      ? "border-red-500"
+                      : formData.phone && "border-green-500"
+                  }`}
+                  id="phone"
+                  name="phone"
+                  placeholder="Enter your phone number"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.phone && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {formErrors.phone}
+                  </p>
+                )}
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all flex items-center justify-center"
+              className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all flex items-center justify-center disabled:bg-blue-300 disabled:cursor-not-allowed"
               disabled={!formValid || isLoading}
+              title={!formValid ? "Please fill all required fields correctly" : ""}
             >
               {isLoading ? (
-                <ClipLoader color="#ffffff" size={20} /> // Show spinner when loading
+                <ClipLoader color="#ffffff" size={20} />
               ) : (
-                "Sign Up" // Show "Sign Up" text when not loading
+                "Sign Up"
               )}
             </button>
 
