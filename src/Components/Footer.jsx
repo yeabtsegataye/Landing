@@ -1,4 +1,5 @@
 import React from "react";
+import logo from "../assets/img/logo-dark-transparent.png";
 
 export const Footer = () => {
   return (
@@ -8,16 +9,20 @@ export const Footer = () => {
           {/* About Section */}
           <div className="w-full md:w-6/12 lg:w-4/12 px-4 mb-8 md:mb-0">
             <a href="index.html" className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-gray-800">REVE</span>
+              <span className="text-2xl font-bold text-gray-800">       <img
+                                     className="side-nav-hide-on-closed w-auto h-8"
+                                     src={logo}
+                                     alt="Logo"
+                                   /></span>
             </a>
             <div className="footer-contact pt-3 text-gray-800">
-              <p>A108 Adam Street</p>
-              <p>New York, NY 535022</p>
+              <p>Bole atlas Street</p>
+              <p>Ethiopia Addis abeba, Bole</p>
               <p className="mt-3">
-                <strong>Phone:</strong> <span>+1 5589 55488 55</span>
+                <strong>Phone:</strong> <span>+2519 2438 4865</span>
               </p>
               <p>
-                <strong>Email:</strong> <span>info@example.com</span>
+                <strong>Email:</strong> <span>revesupportgroup@gmail.com</span>
               </p>
             </div>
           </div>

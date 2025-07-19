@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { logOut } from "../features/auth/authSlice";
 import { useLogoutMutation } from "../features/auth/authApiSlice";
 import { useToast } from "@chakra-ui/react";
+import logo from "../assets/img/logo-dark-transparent.png";
 
 export const Nav = () => {
   const [user, setUser] = useState(null);
@@ -40,7 +41,11 @@ export const Nav = () => {
     <header className="bg-white shadow-md fixed top-0 left-0 w-full z-10">
       <div className="container mx-auto flex justify-between items-center p-4">
         <Link to="/" className="text-2xl font-bold text-gray-800">
-          REVE
+                     <img
+                       className="side-nav-hide-on-closed w-auto h-8"
+                       src={logo}
+                       alt="Logo"
+                     />
         </Link>
         {/* Desktop Menu */}
         <nav className="hidden md:flex space-x-6 items-center">

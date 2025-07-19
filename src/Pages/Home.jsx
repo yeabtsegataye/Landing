@@ -334,8 +334,7 @@ export const Home = () => {
         <div className="container mx-auto px-4 text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-800 mt-2">Services</h2>
           <p className="text-gray-600 mt-4">
-            Necessitatibus eius consequatur ex aliquid fuga eum quidem sint
-            consectetur velit
+            Monitor your financial status in real-time, enabling better resource allocation and decision-making.
           </p>
         </div>
         {/* End Section Title */}
@@ -381,8 +380,7 @@ export const Home = () => {
   >
     <h2 className="text-3xl font-bold text-gray-800">Pricing</h2>
     <p className="text-gray-600 mt-4">
-      Necessitatibus eius consequatur ex aliquid fuga eum quidem sint
-      consectetur velit
+     Choose the package that fits your business needs and unlock powerful tools for finance, orders, employee, and customer management.
     </p>
   </div>
   {/* End Section Title */}
