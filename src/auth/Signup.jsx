@@ -78,7 +78,7 @@ export const Signup = () => {
           ...formData,
           Password: encryptedPassword,
         };
-
+console.log(encryptedFormData,'ffddd')
         const response = await signup(encryptedFormData).unwrap();
 
         if (response.accessToken) {
