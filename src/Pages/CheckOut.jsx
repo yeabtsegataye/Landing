@@ -90,7 +90,7 @@ export const Checkout = () => {
                 <span className="text-2xl">ETB</span>
                 <span>{selectedPlan.price}</span>
                 <span className="text-xl text-gray-500 ml-2">
-                  / {selectedPlan.sub_date} month
+                  / {selectedPlan.sub_date} {selectedPlan.durationUnit}
                 </span>
               </div>
               <p className="text-gray-600 mb-6">{selectedPlan.description}</p>

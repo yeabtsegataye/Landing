@@ -51,9 +51,7 @@ export const Pricing = () => {
       {/* Section Title */}
       <div className="container section-title" data-aos="fade-up">
         <h2>Pricing</h2>
-        <p>
-          choes your preferd pricing  
-        </p>
+        <p>choes your preferd pricing</p>
       </div>
 
       <div className="container" data-aos="fade-up" data-aos-delay="100">
@@ -73,7 +71,9 @@ export const Pricing = () => {
                 <div className="price">
                   <span className="currency">ETB</span>
                   <span className="amount">{plan.price}</span>
-                  <span className="period">/{plan.sub_date} month</span>
+                  <span className="period">
+                    /{plan.sub_date} {plan.durationUnit}
+                  </span>
                 </div>
                 <p className="description">{plan.description}</p>
 
@@ -85,7 +85,10 @@ export const Pricing = () => {
                     </li>
                   ))}
                 </ul>
-                <Link to={`/checkout/${plan.id}`} state={{ selectedPlan: plan }}>
+                <Link
+                  to={`/checkout/${plan.id}`}
+                  state={{ selectedPlan: plan }}
+                >
                   <button className="flex items-center justify-center px-3 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">
                     Buy Now
                     <i className="bi bi-arrow-right ml-1"></i>

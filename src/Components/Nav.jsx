@@ -38,49 +38,49 @@ export const Nav = () => {
     }
   };
   return (
-    <header className="bg-white shadow-md fixed top-0 left-0 w-full z-10">
+    <header className="bg-slate-950/95 shadow-slate-900/20 fixed top-0 left-0 w-full z-20 border-b border-slate-800 backdrop-blur-xl">
       <div className="container mx-auto flex justify-between items-center p-4">
-        <Link to="/" className="text-2xl font-bold text-gray-800">
-                     <img
-                       className="side-nav-hide-on-closed w-auto h-8"
-                       src={logo}
-                       alt="Logo"
-                     />
+        <Link to="/" className="flex items-center gap-3 text-2xl font-bold text-white">
+          <img
+            className="side-nav-hide-on-closed w-auto h-8"
+            src={logo}
+            alt="Logo"
+          />
         </Link>
         {/* Desktop Menu */}
-        <nav className="hidden md:flex space-x-6 items-center">
-          <a href="#hero" className="text-gray-600 hover:text-blue-500">
+        <nav className="hidden md:flex space-x-6 items-center text-slate-200">
+          <a href="#hero" className="transition hover:text-blue-300">
             Home
           </a>
-          <a href="#services" className="text-gray-600 hover:text-blue-500">
+          <a href="#services" className="transition hover:text-blue-300">
             Services
           </a>
-          <a href="#about" className="text-gray-600 hover:text-blue-500">
+          <a href="#about" className="transition hover:text-blue-300">
             About
           </a>
-          <a href="#portfolio" className="text-gray-600 hover:text-blue-500">
+          <a href="#portfolio" className="transition hover:text-blue-300">
             Portfolio
           </a>
-          <a href="#pricing" className="text-gray-600 hover:text-blue-500">
+          <a href="#pricing" className="transition hover:text-blue-300">
             Pricing
           </a>
-          <a href="#contact" className="text-gray-600 hover:text-blue-500">
+          <a href="#contact" className="transition hover:text-blue-300">
             Contact
           </a>
-          <a href="https://hotel-main-dashboard.onrender.com" className="text-gray-600 hover:text-blue-500">
+          <a href="https://hotel-main-dashboard.onrender.com" className="transition hover:text-blue-300">
             Dashboard
           </a>
           {user?.id ? (
             <button
               onClick={handleLogout}
-              className="text-white bg-blue-500 hover:bg-blue-600 rounded-full px-4 py-2"
+              className="text-white bg-blue-600 hover:bg-blue-500 rounded-full px-4 py-2 transition"
             >
               Logout
             </button>
           ) : (
             <Link
               to="/signup"
-              className="text-white bg-blue-500 hover:bg-blue-600 rounded-full px-4 py-2"
+              className="text-white bg-blue-600 hover:bg-blue-500 rounded-full px-4 py-2 transition"
             >
               Get Started
             </Link>
@@ -90,7 +90,7 @@ export const Nav = () => {
         {/* Mobile Menu Toggle */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden text-2xl text-gray-800 focus:outline-none"
+          className="md:hidden text-2xl text-slate-100 focus:outline-none"
         >
           {isMenuOpen ? "✖" : "☰"}
         </button>
@@ -100,9 +100,9 @@ export const Nav = () => {
       <nav
         className={`${
           isMenuOpen ? "block" : "hidden"
-        } md:hidden bg-white shadow-md`}
+        } md:hidden bg-slate-950 border-t border-slate-800 shadow-xl`}
       >
-        <ul className="space-y-4 p-4">
+        <ul className="space-y-4 p-4 text-slate-200">
           <li>
             <a
               href="#hero"
