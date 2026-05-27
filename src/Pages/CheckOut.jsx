@@ -23,6 +23,33 @@ export const Checkout = () => {
     setIsProcessing(true); // Start spinner
     console.log(user.id,id)
     try {
+      const isFreeOrTrial =
+        Boolean(selectedPlan?.isTrial) || Number(selectedPlan?.price) <= 0;
+
+      if (isFreeOrTrial) {
+        const activationResponse = await axios.post(
+          `${import.meta.env.VITE_API_URL}/payment/activate-free`,
+          {
+            packeg_id: Number(id),
+            user_id: user.id,
+          },
+          {
+            withCredentials: true,
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (activationResponse?.data?.data === "success") {
+          window.location.href =
+            activationResponse.data.redirectUrl ||
+            "https://hotel-main-dashboard.onrender.com";
+          return;
+        }
+        throw new Error("Package activation failed");
+      }
+
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/payment/create_chapa`,
         {
@@ -41,6 +68,10 @@ export const Checkout = () => {
       window.location.href = response.data.data.checkout_url;
     } catch (error) {
       console.error("Payment request failed:", error);
+      alert(
+        error?.response?.data?.message ||
+          "Unable to process this package right now."
+      );
     } finally {
       setIsProcessing(false); // Stop spinner
     }
@@ -117,7 +148,10 @@ export const Checkout = () => {
                 <ClipLoader color="#ffffff" size={20} />
               ) : (
                 <>
-                  Confirm Payment <i className="bi bi-arrow-right ml-2"></i>
+                  {Boolean(selectedPlan?.isTrial) || Number(selectedPlan?.price) <= 0
+                    ? "Activate Package"
+                    : "Confirm Payment"}{" "}
+                  <i className="bi bi-arrow-right ml-2"></i>
                 </>
               )}
             </button>
