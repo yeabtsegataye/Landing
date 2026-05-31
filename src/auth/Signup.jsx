@@ -18,11 +18,13 @@ export const Signup = () => {
 
   const [formData, setFormData] = useState({
     name: "",
+    fatherName: "",     // fix: was missing from initial state
     email: "",
     password: "",
     passwordConfirm: "",
     hotel_name: "",
     hotel_description: "",
+    referralCode: "",
   });
 
   const [formErrors, setFormErrors] = useState({});
@@ -30,6 +32,20 @@ export const Signup = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [referralValid, setReferralValid] = useState(null); // null=unchecked, true, false
+
+  const checkReferralCode = async (code) => {
+    if (!code.trim()) { setReferralValid(null); return; }
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/referrals/validate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: code.trim().toUpperCase() }),
+      });
+      const data = await res.json();
+      setReferralValid(data.valid === true);
+    } catch { setReferralValid(false); }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,10 +91,10 @@ export const Signup = () => {
           SECRET_KEY
         ).toString();
 
-        // Include hotel_name and hotel_description in the request payload
         const encryptedFormData = {
           ...formData,
           Password: encryptedPassword,
+          referralCode: formData.referralCode.trim().toUpperCase() || undefined,
         };
 console.log(encryptedFormData,'ffddd')
         const response = await signup(encryptedFormData).unwrap();
@@ -289,6 +305,47 @@ console.log(encryptedFormData,'ffddd')
                   onChange={handleChange}
                   required
                 />
+              </div>
+
+              {/* Referral code — spans both columns */}
+              <div className="mb-2 md:col-span-2">
+                <label htmlFor="referralCode" className="block text-sm font-medium text-gray-700 mb-2">
+                  Referral Code{" "}
+                  <span className="text-gray-400 font-normal">(optional)</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="referralCode"
+                    name="referralCode"
+                    placeholder="e.g. REF-XKZW8PLM"
+                    value={formData.referralCode}
+                    onChange={handleChange}
+                    onBlur={(e) => checkReferralCode(e.target.value)}
+                    className={`w-full px-4 py-2 pr-28 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all uppercase tracking-widest ${
+                      referralValid === true
+                        ? "border-green-500 bg-green-50"
+                        : referralValid === false
+                        ? "border-red-400"
+                        : ""
+                    }`}
+                  />
+                  {referralValid === true && (
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600 text-sm font-semibold">
+                      ✓ Valid code
+                    </span>
+                  )}
+                  {referralValid === false && (
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-red-400 text-sm">
+                      Invalid
+                    </span>
+                  )}
+                </div>
+                {referralValid === true && (
+                  <p className="text-green-600 text-xs mt-1 flex items-center gap-1">
+                    🎁 Great! You'll receive bonus license days automatically after your first payment.
+                  </p>
+                )}
               </div>
             </div>
 
