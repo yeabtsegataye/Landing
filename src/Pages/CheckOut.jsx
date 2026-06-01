@@ -10,8 +10,9 @@ export const Checkout = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [user, setUser] = useState(null);
-  const [isProcessing, setIsProcessing] = useState(false); // State for button spinner
-  
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [pricing, setPricing] = useState(null); // pro-rata breakdown
+
   const reduxUser = useSelector((state) => state.auth.user);
   const accessToken = useSelector((state) => state.auth.token);
 
@@ -94,6 +95,22 @@ export const Checkout = () => {
     fetchPlan();
   }, [id]);
 
+  // Fetch pro-rata pricing breakdown once both plan and user are ready
+  useEffect(() => {
+    if (!selectedPlan || !user?.id || !accessToken) return;
+    const isFreeOrTrial = selectedPlan.isTrial || Number(selectedPlan.price) <= 0;
+    if (isFreeOrTrial) return;
+
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/payment/upgrade-preview`, {
+        params: { packeg_id: Number(id), user_id: user.id },
+        headers: { Authorization: `Bearer ${accessToken}` },
+        withCredentials: true,
+      })
+      .then((res) => setPricing(res.data))
+      .catch(() => setPricing(null)); // fail silently — full price is the fallback
+  }, [selectedPlan, user, accessToken, id]);
+
   if (loading) {
     return <div className="text-center">Loading...</div>;
   }
@@ -117,13 +134,50 @@ export const Checkout = () => {
               <h3 className="text-2xl font-semibold text-gray-800 mb-4">
                 {selectedPlan.name}
               </h3>
-              <div className="flex items-center text-4xl font-bold text-blue-600 mb-4">
-                <span className="text-2xl">ETB</span>
-                <span>{selectedPlan.price}</span>
-                <span className="text-xl text-gray-500 ml-2">
-                  / {selectedPlan.sub_date} {selectedPlan.durationUnit}
-                </span>
-              </div>
+
+              {/* Price breakdown */}
+              {pricing && pricing.proRataCredit > 0 ? (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                  <div className="flex justify-between text-gray-600 mb-1">
+                    <span>
+                      {selectedPlan.name} ({selectedPlan.sub_date}{" "}
+                      {selectedPlan.durationUnit})
+                    </span>
+                    <span>ETB {pricing.fullPrice.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-green-600 mb-3">
+                    <span>
+                      Unused days credit ({pricing.remainingDays} days remaining)
+                    </span>
+                    <span>− ETB {pricing.proRataCredit.toFixed(2)}</span>
+                  </div>
+                  <div className="border-t border-blue-200 pt-3 flex justify-between items-baseline">
+                    <span className="text-lg font-bold text-gray-800">
+                      You pay today
+                    </span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-2xl text-blue-600">ETB</span>
+                      <span className="text-4xl font-bold text-blue-600">
+                        {pricing.chargeAmount.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Your current plan's unused days are credited toward this upgrade.
+                    The new plan starts today and runs for {selectedPlan.sub_date}{" "}
+                    {selectedPlan.durationUnit}.
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-center text-4xl font-bold text-blue-600 mb-4">
+                  <span className="text-2xl">ETB</span>
+                  <span>{selectedPlan.price}</span>
+                  <span className="text-xl text-gray-500 ml-2">
+                    / {selectedPlan.sub_date} {selectedPlan.durationUnit}
+                  </span>
+                </div>
+              )}
+
               <p className="text-gray-600 mb-6">{selectedPlan.description}</p>
 
               <h4 className="text-xl font-semibold text-gray-800 mb-4">
@@ -150,6 +204,8 @@ export const Checkout = () => {
                 <>
                   {Boolean(selectedPlan?.isTrial) || Number(selectedPlan?.price) <= 0
                     ? "Activate Package"
+                    : pricing?.proRataCredit > 0
+                    ? `Pay ETB ${pricing.chargeAmount.toFixed(2)}`
                     : "Confirm Payment"}{" "}
                   <i className="bi bi-arrow-right ml-2"></i>
                 </>
