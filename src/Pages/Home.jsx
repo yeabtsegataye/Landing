@@ -328,50 +328,102 @@ export const Home = () => {
       {/* ── DIVIDER ──────────────────────────────────────────────────── */}
       <div className="line-rule" />
 
-      {/* ── MENU FEATURE ─────────────────────────────────────────────── */}
-      <section id="about" className="relative overflow-hidden py-20 grain">
-        <div className="pointer-events-none absolute left-0 top-1/2 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-blue-600/[0.05] blur-[100px]" />
+      {/* ── ABOUT ─────────────────────────────────────────────────────── */}
+      <section id="about" className="relative overflow-hidden py-24 grain">
+        {/* Background glows */}
+        <div className="pointer-events-none absolute left-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-blue-600/[0.05] blur-[120px]" />
+        <div className="pointer-events-none absolute right-0 bottom-0 h-[300px] w-[300px] rounded-full bg-amber-500/[0.04] blur-[80px]" />
 
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid items-center gap-12 lg:grid-cols-[auto_1fr]">
+          {/* Section header */}
+          <div className="mb-16 max-w-2xl">
+            <Reveal><Label>Everything your venue needs</Label></Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="serif mt-4 text-[2rem] font-normal leading-tight text-white lg:text-[2.8rem]">
+                One platform for hotels,
+                <br />
+                <span className="italic text-slate-400">cafés &amp; restaurants.</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="sans mt-4 text-[0.95rem] leading-[1.8] text-slate-400 font-light max-w-xl">
+                REVE IT is a complete hotel ERP system — from the moment a guest walks in to the moment they check out, every operation is covered.
+              </p>
+            </Reveal>
+          </div>
+
+          {/* Main feature grid */}
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+
+            {/* Left: image with floating badges */}
             <Reveal>
               <div className="relative flex justify-center">
-                <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-amber-400/5 to-transparent" />
-                <img
-                  src={menu}
-                  alt="Digital menu"
-                  className="relative w-full max-w-[440px] max-h-[620px] object-cover object-top rounded-[1.5rem] border border-white/6 shadow-2xl shadow-black/50"
-                />
+                {/* Glow behind image */}
+                <div className="absolute inset-6 -z-10 rounded-[2rem] bg-amber-400/[0.06] blur-[50px]" />
+                <div className="absolute inset-10 -z-10 rounded-[2rem] bg-blue-500/[0.05] blur-[60px]" />
+
+                {/* Device frame */}
+                <div className="relative rounded-[2rem] border border-white/8 bg-[#0d1117] p-2 shadow-2xl shadow-black/60">
+                  <div className="h-1.5 w-20 rounded-full bg-white/10 mx-auto mb-2" />
+                  <img
+                    src={menu}
+                    alt="REVE IT digital menu"
+                    className="w-full max-w-[360px] max-h-[580px] object-cover object-top rounded-[1.2rem]"
+                  />
+                </div>
+
+                {/* Floating stat badges */}
+                <div className="sans absolute -bottom-4 left-0 rounded-2xl border border-white/10 bg-[#0b1220]/95 px-5 py-3 shadow-xl backdrop-blur-md">
+                  <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-0.5">Orders today</p>
+                  <p className="text-base font-semibold text-white">+127 <span className="text-emerald-400 text-xs">↑ 18%</span></p>
+                </div>
+                <div className="sans absolute -top-4 right-0 rounded-2xl border border-amber-400/20 bg-amber-400/10 px-4 py-2.5 shadow-xl backdrop-blur-md">
+                  <p className="text-[10px] uppercase tracking-widest text-amber-400/70 mb-0.5">Revenue</p>
+                  <p className="text-sm font-semibold text-white">ETB 42,800</p>
+                </div>
               </div>
             </Reveal>
 
+            {/* Right: feature list */}
             <Reveal delay={0.15}>
-              <div className="space-y-6">
-                <div>
-                  <Label>Digital menu intelligence</Label>
-                  <h2 className="serif mt-4 text-[2rem] font-normal leading-tight text-white lg:text-[2.6rem]">
-                    Menus that look
-                    <br />
-                    <span className="italic text-slate-400">premium</span> and work fast.
-                  </h2>
-                </div>
-                <p className="sans text-[0.95rem] leading-[1.8] text-slate-400 font-light">
-                  Enable guests to browse, customize, and pay without waiting for staff — while your team gains full, real-time order visibility.
-                </p>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {[
-                    { title: "Instant setup", desc: "Publish menus and start taking orders in minutes." },
-                    { title: "Higher checks", desc: "Built-in upsell prompts and curated recommendations." },
-                  ].map((item, i) => (
-                    <div
-                      key={i}
-                      className="rounded-xl border border-white/6 bg-white/[0.025] p-5 transition-all duration-300 hover:border-amber-400/15 hover:bg-white/[0.04]"
-                    >
-                      <p className="serif text-base font-normal text-white mb-1">{item.title}</p>
+              <div className="space-y-5">
+                {[
+                  {
+                    num: "01",
+                    title: "Digital QR Menu",
+                    desc: "Guests scan, browse and order instantly. Zero wait, full elegance. Update items in real time from any device.",
+                  },
+                  {
+                    num: "02",
+                    title: "Room Reservation System",
+                    desc: "Manage bookings, availability, check-in and check-out from one clean interface. Never double-book again.",
+                  },
+                  {
+                    num: "03",
+                    title: "Financial Reporting & P&L",
+                    desc: "Auto-generate profit & loss statements, daily reports, tax summaries, and revenue breakdowns with one click.",
+                  },
+                  {
+                    num: "04",
+                    title: "Staff & Inventory Control",
+                    desc: "Track ingredients, manage employee shifts, and control costs — all from the same dashboard.",
+                  },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    className="group flex gap-5 rounded-2xl border border-white/5 bg-white/[0.02] p-5 transition-all duration-300 hover:border-amber-400/15 hover:bg-white/[0.04]"
+                  >
+                    <div className="shrink-0 sans text-[11px] font-semibold tracking-widest text-amber-400/60 pt-1 w-6">{item.num}</div>
+                    <div>
+                      <p className="serif text-base font-normal text-white mb-1 group-hover:text-amber-100 transition-colors">{item.title}</p>
                       <p className="sans text-sm text-slate-500 font-light leading-relaxed">{item.desc}</p>
                     </div>
-                  ))}
-                </div>
+                  </motion.div>
+                ))}
               </div>
             </Reveal>
           </div>
@@ -402,11 +454,21 @@ export const Home = () => {
           </div>
 
           <Reveal delay={0.1}>
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/6 shadow-2xl shadow-black/60 glow-gold">
-              {/* Gradient top bar */}
-              <div className="h-1 w-full bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
-              <img src={dashboard} alt="Dashboard" className="w-full" />
-              <div className="pointer-events-none absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/5" />
+            {/* Outer glow layer */}
+            <div className="relative mx-auto max-w-4xl">
+              <div className="pointer-events-none absolute -inset-4 rounded-[2.5rem] bg-amber-400/[0.05] blur-[40px]" />
+              <div className="pointer-events-none absolute -inset-8 rounded-[3rem] bg-blue-500/[0.04] blur-[60px]" />
+
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="relative overflow-hidden rounded-[2rem] border border-white/8 shadow-2xl shadow-black/70 glow-gold"
+                style={{ filter: "drop-shadow(0 40px 80px rgba(0,0,0,0.6)) drop-shadow(0 0 40px rgba(251,191,36,0.06))" }}
+              >
+                <div className="h-1 w-full bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
+                <img src={dashboard} alt="Dashboard" className="w-full" />
+                <div className="pointer-events-none absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/5" />
+              </motion.div>
             </div>
           </Reveal>
         </div>
@@ -505,73 +567,135 @@ export const Home = () => {
       <div className="line-rule" />
 
       {/* ── CONTACT ──────────────────────────────────────────────────── */}
-      <section id="contact" className="relative py-20 grain overflow-hidden">
+      <section id="contact" className="relative py-24 grain overflow-hidden">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/20 to-transparent" />
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/[0.03] blur-[120px]" />
 
         <div className="container mx-auto px-6 lg:px-12">
-          <div className="mb-12 text-center">
-            <Reveal><Label>Ready to grow?</Label></Reveal>
+          {/* Header */}
+          <div className="mb-16 text-center">
+            <Reveal><Label>Get in touch</Label></Reveal>
             <Reveal delay={0.1}>
-              <h2 className="serif mx-auto mt-4 max-w-2xl text-[2rem] font-normal leading-tight text-white lg:text-[2.6rem]">
-                Modern hospitality
+              <h2 className="serif mx-auto mt-4 max-w-2xl text-[2rem] font-normal leading-tight text-white lg:text-[2.8rem]">
+                Let's build your venue's
                 <br />
-                <span className="italic text-slate-400">starts here.</span>
+                <span className="italic text-slate-400">future together.</span>
               </h2>
             </Reveal>
             <Reveal delay={0.2}>
-              <p className="sans mx-auto mt-4 max-w-xl text-[0.95rem] font-light leading-relaxed text-slate-500">
-                Book a demo and let REVE IT Solutions help your venue deliver faster, smarter, and more memorable service.
+              <p className="sans mx-auto mt-4 max-w-lg text-[0.95rem] font-light leading-relaxed text-slate-500">
+                Reach out for a free demo or any questions. Our team is ready to help you get started.
               </p>
             </Reveal>
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-3 max-w-4xl mx-auto">
-            {[
-              {
-                icon: <MapPinIcon className="h-6 w-6" />,
-                label: "Visit us",
-                lines: ["Addis Abeba, Bole", "Atlas Main Road"],
-              },
-              {
-                icon: <PhoneIcon className="h-6 w-6" />,
-                label: "Call us",
-                lines: ["+2 5192 4384 865"],
-              },
-              {
-                icon: <EnvelopeIcon className="h-6 w-6" />,
-                label: "Email us",
-                lines: ["tatitaye0@gmail.com", "betelhembelete0@gmail.com"],
-              },
-            ].map((item, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="card-hover group rounded-2xl border border-white/6 bg-white/[0.025] p-6 transition-all duration-300">
-                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/8 bg-white/[0.04] text-amber-400 transition-all duration-300 group-hover:border-amber-400/25 group-hover:bg-amber-400/8">
-                    {item.icon}
-                  </div>
-                  <p className="serif mb-2 text-lg font-normal text-white">{item.label}</p>
-                  {item.lines.map((line, j) => (
-                    <p key={j} className="sans text-sm text-slate-500 font-light leading-relaxed">{line}</p>
-                  ))}
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          {/* Two-column layout */}
+          <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr] max-w-5xl mx-auto items-stretch">
 
-          {/* CTA strip */}
-          <Reveal delay={0.3}>
-            <div className="mt-12 max-w-4xl mx-auto flex flex-col items-center justify-between gap-6 rounded-3xl border border-amber-400/15 bg-amber-400/[0.04] px-10 py-8 sm:flex-row glow-gold-sm">
-              <p className="serif text-xl text-white text-center sm:text-left">
-                Ready to transform your venue?
-              </p>
-              <a
-                href="#pricing"
-                className="sans group inline-flex shrink-0 items-center gap-2 rounded-full bg-amber-400 px-7 py-3.5 text-[0.875rem] font-semibold text-black shadow-lg shadow-amber-400/20 transition-all duration-300 hover:bg-amber-300"
-              >
-                Get started today
-                <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
-            </div>
-          </Reveal>
+            {/* Left: contact details stacked */}
+            <Reveal>
+              <div className="flex flex-col gap-4 h-full">
+                {[
+                  {
+                    icon: <MapPinIcon className="h-5 w-5" />,
+                    label: "Our Location",
+                    value: "Hayat, Feres Bet",
+                    sub: "Addis Ababa, Ethiopia",
+                    href: "https://www.google.com/maps/place/Gift+Real+Estate+Ayat/@9.0217854,38.8883326,17z",
+                    external: true,
+                  },
+                  {
+                    icon: <PhoneIcon className="h-5 w-5" />,
+                    label: "Phone",
+                    value: "+251 924 384 865",
+                    sub: "Available Mon–Sat, 8am–6pm",
+                    href: "tel:+251924384865",
+                    external: false,
+                  },
+                  {
+                    icon: <EnvelopeIcon className="h-5 w-5" />,
+                    label: "Email",
+                    value: "yeabtsegatayemergia",
+                    sub: "@gmail.com",
+                    href: "mailto:yeabtsegatayemergia@gmail.com",
+                    external: false,
+                  },
+                ].map((item, i) => (
+                  <motion.a
+                    key={i}
+                    href={item.href}
+                    target={item.external ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    className="group flex items-center gap-5 rounded-2xl border border-white/6 bg-white/[0.025] p-5 transition-all duration-300 hover:border-amber-400/20 hover:bg-white/[0.04]"
+                  >
+                    <div className="shrink-0 flex h-12 w-12 items-center justify-center rounded-xl border border-white/8 bg-white/[0.04] text-amber-400 transition-all duration-300 group-hover:border-amber-400/30 group-hover:bg-amber-400/10">
+                      {item.icon}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="sans text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-600 mb-0.5">{item.label}</p>
+                      <p className="serif text-base font-normal text-white leading-snug group-hover:text-amber-100 transition-colors truncate">{item.value}</p>
+                      <p className="sans text-xs text-slate-500 font-light">{item.sub}</p>
+                    </div>
+                    <ArrowRightIcon className="h-4 w-4 text-slate-700 shrink-0 ml-auto transition-all duration-300 group-hover:text-amber-400 group-hover:translate-x-1" />
+                  </motion.a>
+                ))}
+              </div>
+            </Reveal>
+
+            {/* Right: CTA card */}
+            <Reveal delay={0.2}>
+              <div className="relative flex flex-col justify-between rounded-3xl border border-amber-400/15 bg-gradient-to-br from-amber-400/[0.06] via-transparent to-transparent p-10 glow-gold-sm overflow-hidden h-full">
+                {/* Decorative corner */}
+                <div className="pointer-events-none absolute -top-16 -right-16 h-48 w-48 rounded-full bg-amber-400/[0.08] blur-[50px]" />
+                <div className="pointer-events-none absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-blue-500/[0.06] blur-[40px]" />
+
+                <div className="relative space-y-4 mb-10">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/20 bg-amber-400/10 px-4 py-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                    <span className="sans text-[11px] font-semibold uppercase tracking-wider text-amber-400">Free demo available</span>
+                  </div>
+                  <h3 className="serif text-[1.8rem] font-normal text-white leading-snug">
+                    Ready to transform
+                    <br />
+                    <span className="italic text-amber-300/80">your venue?</span>
+                  </h3>
+                  <p className="sans text-sm font-light text-slate-400 leading-relaxed max-w-xs">
+                    Join hotels and cafés across Ethiopia already running smarter with REVE IT Solutions.
+                  </p>
+
+                  {/* Bullet highlights */}
+                  <ul className="space-y-2 pt-2">
+                    {["No setup fee", "Cancel any time", "24/7 support included"].map((t, i) => (
+                      <li key={i} className="sans flex items-center gap-2.5 text-sm text-slate-400 font-light">
+                        <CheckIcon className="h-4 w-4 text-amber-400 shrink-0" />
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="relative flex flex-col sm:flex-row gap-3">
+                  <a
+                    href="#pricing"
+                    className="sans group inline-flex items-center justify-center gap-2 rounded-full bg-amber-400 px-7 py-3.5 text-[0.875rem] font-semibold text-black shadow-lg shadow-amber-400/20 transition-all duration-300 hover:bg-amber-300"
+                  >
+                    View plans
+                    <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </a>
+                  <a
+                    href="mailto:yeabtsegatayemergia@gmail.com"
+                    className="sans inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-7 py-3.5 text-[0.875rem] font-semibold text-white transition-all duration-300 hover:border-white/20 hover:bg-white/[0.08]"
+                  >
+                    Email us
+                  </a>
+                </div>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 

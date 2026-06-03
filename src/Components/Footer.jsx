@@ -17,15 +17,15 @@ export const Footer = () => {
               <span className="text-xl font-bold text-white">REVE IT</span>
             </a>
             <div className="footer-contact pt-4 text-slate-400">
-              <p>Bole atlas Street</p>
-              <p>Ethiopia Addis abeba, Bole</p>
+              <p>Hayat, Feres Bet</p>
+              <p>Addis Ababa, Ethiopia</p>
               <p className="mt-4">
                 <strong className="text-white">Phone:</strong>{" "}
-                <span className="text-slate-300">+2519 2438 4865</span>
+                <span className="text-slate-300">+251 924 384 865</span>
               </p>
               <p>
                 <strong className="text-white">Email:</strong>{" "}
-                <span className="text-slate-300">revesupportgroup@gmail.com</span>
+                <span className="text-slate-300">yeabtsegatayemergia@gmail.com</span>
               </p>
             </div>
           </div>

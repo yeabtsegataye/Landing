@@ -16,16 +16,20 @@ export const Checkout = () => {
   const [pricing, setPricing] = useState(null);
 
   // Payment method state
-  const [activeMethod, setActiveMethod] = useState("chapa"); // 'chapa' | 'leul'
+  const [activeMethod, setActiveMethod] = useState(null); // null until loaded
+  const [methodLoading, setMethodLoading] = useState(true);
   const [bankAccounts, setBankAccounts] = useState(null);
 
   // Leul flow state
-  const [leulStep, setLeulStep] = useState("init"); // 'init' | 'instructions' | 'pending'
+  const [leulStep, setLeulStep] = useState("init"); // 'init' | 'instructions' | 'pending' | 'rejected'
   const [txRef, setTxRef] = useState("");
   const [reference, setReference] = useState("");
   const [receiptFile, setReceiptFile] = useState(null);
   const [receiptPreview, setReceiptPreview] = useState(null);
   const [submitError, setSubmitError] = useState("");
+  const [rejectMessage, setRejectMessage] = useState("");
+  const [countdown, setCountdown] = useState(5);
+  const [copiedKey, setCopiedKey] = useState(null);
 
   const reduxUser = useSelector((state) => state.auth.user);
   const accessToken = useSelector((state) => state.auth.token);
@@ -44,7 +48,8 @@ export const Checkout = () => {
   useEffect(() => {
     axios.get(`${API}/super/payment-settings`)
       .then((r) => setActiveMethod(r.data.activeMethod ?? "chapa"))
-      .catch(() => {}); // fallback to chapa
+      .catch(() => setActiveMethod("chapa"))
+      .finally(() => setMethodLoading(false));
   }, []);
 
   // Fetch pro-rata pricing
@@ -156,9 +161,50 @@ export const Checkout = () => {
         setSubmitError("Something went wrong. Please try again or contact support.");
       }
     } catch (err) {
-      setSubmitError(err?.response?.data?.message || "Failed to submit receipt. Please try again.");
+      const status = err?.response?.status;
+      const msg = err?.response?.data?.message || "Failed to submit receipt. Please try again.";
+      // 4xx = instant rejection (wrong account, duplicate, insufficient amount, etc.)
+      if (status >= 400 && status < 500) {
+        setRejectMessage(msg);
+        setLeulStep("rejected");
+        setCountdown(5);
+        const timer = setInterval(() => {
+          setCountdown((c) => {
+            if (c <= 1) {
+              clearInterval(timer);
+              window.location.href = "/";
+            }
+            return c - 1;
+          });
+        }, 1000);
+      } else {
+        setSubmitError(msg);
+      }
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  // ── Account click: copy + open app ────────────────────────────────────────
+  const APP_SCHEMES = {
+    telebirr: "telebirr://",
+    cbe:      "cbebirr://",
+    dashen:   null,
+    abyssinia: null,
+  };
+
+  const handleAccountClick = (key, value) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(value).catch(() => {});
+    }
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey((k) => (k === key ? null : k)), 2000);
+
+    const scheme = APP_SCHEMES[key];
+    if (scheme) {
+      const a = document.createElement("a");
+      a.href = scheme;
+      a.click();
     }
   };
 
@@ -234,8 +280,12 @@ export const Checkout = () => {
               </ul>
             </div>
 
-            {/* Free / trial: no method toggle */}
-            {isFreeOrTrial ? (
+            {/* Payment section — wait for method to load to avoid flash */}
+            {methodLoading ? (
+              <div className="flex justify-center py-6">
+                <ClipLoader color="#2563eb" size={28} />
+              </div>
+            ) : isFreeOrTrial ? (
               <button
                 onClick={handleChapaPayment}
                 disabled={isProcessing}
@@ -268,30 +318,39 @@ export const Checkout = () => {
                         <p className="text-gray-700 mb-3 font-medium">Account Holder: <span className="text-green-700">{pricing.accountHolderName}</span></p>
                       )}
                       <div className="grid gap-2">
-                        {bankAccounts?.cbe && (
-                          <div className="flex justify-between items-center bg-white rounded-lg px-4 py-3 border border-green-100">
-                            <span className="text-gray-600 font-medium">CBE</span>
-                            <span className="font-mono font-bold text-gray-900">{bankAccounts.cbe}</span>
-                          </div>
-                        )}
-                        {bankAccounts?.telebirr && (
-                          <div className="flex justify-between items-center bg-white rounded-lg px-4 py-3 border border-green-100">
-                            <span className="text-gray-600 font-medium">Telebirr</span>
-                            <span className="font-mono font-bold text-gray-900">{bankAccounts.telebirr}</span>
-                          </div>
-                        )}
-                        {bankAccounts?.dashen && (
-                          <div className="flex justify-between items-center bg-white rounded-lg px-4 py-3 border border-green-100">
-                            <span className="text-gray-600 font-medium">Dashen Bank</span>
-                            <span className="font-mono font-bold text-gray-900">{bankAccounts.dashen}</span>
-                          </div>
-                        )}
-                        {bankAccounts?.abyssinia && (
-                          <div className="flex justify-between items-center bg-white rounded-lg px-4 py-3 border border-green-100">
-                            <span className="text-gray-600 font-medium">Bank of Abyssinia</span>
-                            <span className="font-mono font-bold text-gray-900">{bankAccounts.abyssinia}</span>
-                          </div>
-                        )}
+                        {[
+                          { key: "cbe",       label: "CBE",              value: bankAccounts?.cbe },
+                          { key: "telebirr",  label: "Telebirr",         value: bankAccounts?.telebirr },
+                          { key: "dashen",    label: "Dashen Bank",      value: bankAccounts?.dashen },
+                          { key: "abyssinia", label: "Bank of Abyssinia",value: bankAccounts?.abyssinia },
+                        ].filter(a => a.value).map(({ key, label, value }) => (
+                          <button
+                            key={key}
+                            type="button"
+                            onClick={() => handleAccountClick(key, value)}
+                            className="flex justify-between items-center w-full bg-white rounded-lg px-4 py-3 border border-green-100 hover:border-green-400 hover:bg-green-50 active:scale-[0.98] transition-all cursor-pointer text-left"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-gray-600 font-medium">{label}</span>
+                              {APP_SCHEMES[key] && (
+                                <span className="text-xs bg-green-100 text-green-700 rounded-full px-2 py-0.5">
+                                  Open app
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono font-bold text-gray-900">{value}</span>
+                              {copiedKey === key ? (
+                                <span className="text-xs text-green-600 font-semibold">Copied!</span>
+                              ) : (
+                                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                                </svg>
+                              )}
+                            </div>
+                          </button>
+                        ))}
                       </div>
                       {pricing?.instructions && (
                         <p className="mt-3 text-sm text-gray-600">{pricing.instructions}</p>
@@ -338,10 +397,20 @@ export const Checkout = () => {
                       <button
                         onClick={handleSubmitLeul}
                         disabled={isProcessing}
-                        className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition flex justify-center items-center"
+                        className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition flex justify-center items-center gap-2"
                       >
-                        {isProcessing ? <ClipLoader color="#fff" size={20} /> : "Submit Receipt"}
+                        {isProcessing ? (
+                          <>
+                            <ClipLoader color="#fff" size={18} />
+                            <span>Verifying payment...</span>
+                          </>
+                        ) : "Submit Receipt"}
                       </button>
+                      {isProcessing && (
+                        <p className="text-center text-sm text-gray-500 mt-1">
+                          Checking your receipt with Leul — this may take a few seconds.
+                        </p>
+                      )}
                     </div>
                   </div>
                 )}
@@ -352,6 +421,17 @@ export const Checkout = () => {
                     <h4 className="text-xl font-semibold text-gray-800 mb-2">Receipt Submitted!</h4>
                     <p className="text-gray-600">
                       We could not automatically verify your transaction reference. Your receipt has been saved and will be reviewed shortly. Your subscription will be activated once confirmed.
+                    </p>
+                  </div>
+                )}
+
+                {leulStep === "rejected" && (
+                  <div className="text-center py-8">
+                    <div className="text-5xl mb-4">❌</div>
+                    <h4 className="text-xl font-semibold text-red-700 mb-2">Payment Rejected</h4>
+                    <p className="text-gray-700 mb-4">{rejectMessage}</p>
+                    <p className="text-sm text-gray-500">
+                      Redirecting to home in <span className="font-bold text-red-600">{countdown}</span> second{countdown !== 1 ? "s" : ""}…
                     </p>
                   </div>
                 )}

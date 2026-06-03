@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import CryptoJS from "crypto-js";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import { useSignupMutation } from "../features/auth/authApiSlice";
@@ -7,8 +6,6 @@ import SignupImage from "../assets/Signup.png"; // Import your image from assets
 import { ClipLoader } from "react-spinners"; // Import the spinner component
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../features/auth/authSlice";
-
-const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
 
 export const Signup = () => {
   const navigate = useNavigate();
@@ -86,18 +83,12 @@ export const Signup = () => {
     if (formValid) {
       setIsLoading(true); // Set loading to true when submitting
       try {
-        const encryptedPassword = CryptoJS.AES.encrypt(
-          formData.password,
-          SECRET_KEY
-        ).toString();
-
-        const encryptedFormData = {
+        const signupData = {
           ...formData,
-          Password: encryptedPassword,
+          Password: formData.password,
           referralCode: formData.referralCode.trim().toUpperCase() || undefined,
         };
-console.log(encryptedFormData,'ffddd')
-        const response = await signup(encryptedFormData).unwrap();
+        const response = await signup(signupData).unwrap();
 
         if (response.accessToken) {
           dispatch(setCredentials(response));

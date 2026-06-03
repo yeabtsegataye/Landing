@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import CryptoJS from "crypto-js";
 import { useLoginMutation } from "../features/auth/authApiSlice";
 import { setCredentials } from "../features/auth/authSlice";
 import { useToast } from "@chakra-ui/react";
 import Notif_Toast from "../Components/Tost";
-import LoginImage from "../assets/Login2.png"; // Import your image from assets
-import { ClipLoader } from "react-spinners"; // Import the spinner component
-
-const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
+import LoginImage from "../assets/Login2.png";
+import { ClipLoader } from "react-spinners";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -44,15 +41,9 @@ function Login() {
     if (formValid) {
       setIsLoading(true); // Set loading to true when submitting
       try {
-        // Encrypt the password
-        const encryptedPassword = CryptoJS.AES.encrypt(
-          password,
-          SECRET_KEY
-        ).toString();
-
         const userData = await login({
           email,
-          Password: encryptedPassword,
+          Password: password,
         }).unwrap();
         if (userData) {
           dispatch(setCredentials(userData));
@@ -67,7 +58,6 @@ function Login() {
           navigate("/");
         }
       } catch (error) {
-        console.log(error,'eee')
         toast({
           title: "Error Logging in",
           description:  error?.data?.message ||error?.data ||"An unexpected error occurred",

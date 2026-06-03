@@ -58,18 +58,17 @@ export const Nav = () => {
           <a href="#about" className="transition hover:text-blue-300">
             About
           </a>
-          <a href="#portfolio" className="transition hover:text-blue-300">
-            Portfolio
-          </a>
           <a href="#pricing" className="transition hover:text-blue-300">
             Pricing
           </a>
           <a href="#contact" className="transition hover:text-blue-300">
             Contact
           </a>
-          <a href="https://hotel-main-dashboard.onrender.com" className="transition hover:text-blue-300">
-            Dashboard
-          </a>
+          {user?.id && (
+            <a href="https://hotel-main-dashboard.onrender.com" className="transition hover:text-amber-400">
+              Dashboard
+            </a>
+          )}
           {user?.id ? (
             <button
               onClick={handleLogout}
@@ -132,15 +131,6 @@ export const Nav = () => {
           </li>
           <li>
             <a
-              href="#portfolio"
-              className="block text-gray-600 hover:text-blue-500"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Portfolio
-            </a>
-          </li>
-          <li>
-            <a
               href="#pricing"
               className="block text-gray-600 hover:text-blue-500"
               onClick={() => setIsMenuOpen(false)}
@@ -157,15 +147,17 @@ export const Nav = () => {
               Contact
             </a>
           </li>
-          <li>
-            <a
-              href="https://hotel-main-dashboard.onrender.com"
-              className="block text-gray-600 hover:text-blue-500"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Dashboard
-            </a>
-          </li>
+          {user?.id && (
+            <li>
+              <a
+                href="https://hotel-main-dashboard.onrender.com"
+                className="block text-gray-600 hover:text-blue-500"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Dashboard
+              </a>
+            </li>
+          )}
           <li>
             {user?.id ? (
               <button
