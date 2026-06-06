@@ -6,9 +6,11 @@ import { Footer } from "../Components/Footer";
 import hero from "../assets/img/hero-img.png";
 import menu from "../assets/img/menu.png";
 import dashboard from "../assets/img/dashboard.png";
+import payslipImg from "../assets/img/payslip.png";
+import plImg from "../assets/img/pl-statement.png";
 import {
   QrCodeIcon,
-  CreditCardIcon,
+  BanknotesIcon,
   ClockIcon,
   MapPinIcon,
   PhoneIcon,
@@ -42,6 +44,126 @@ const Label = ({ children }) => (
   </p>
 );
 
+/* ─── Screenshot-based previews with animation ──────────────────── */
+const PayslipPreview = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+    className="relative overflow-hidden rounded-2xl border border-amber-400/15 bg-[#0d1117] p-1 shadow-2xl shadow-black/40"
+  >
+    {/* Gold top line */}
+    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/60 to-transparent" />
+    {/* Ambient glow */}
+    <div className="pointer-events-none absolute right-0 top-0 h-32 w-32 rounded-full bg-amber-400/[0.08] blur-[40px]" />
+
+    {/* Label bar */}
+    <div className="flex items-center justify-between px-4 py-2.5">
+      <div className="flex items-center gap-2">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+        <span className="sans text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+          Live Payslip
+        </span>
+      </div>
+      <span className="sans rounded-full border border-white/8 bg-white/[0.04] px-2 py-0.5 text-[9px] uppercase tracking-wider text-slate-600">
+        Auto-generated
+      </span>
+    </div>
+
+    {/* Actual payslip screenshot */}
+    <motion.div
+      initial={{ scale: 1.03, opacity: 0 }}
+      whileInView={{ scale: 1, opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className="overflow-hidden rounded-xl"
+    >
+      <img
+        src={payslipImg}
+        alt="Payslip example — Tomi International Hotel"
+        className="w-full"
+        style={{ filter: "brightness(0.97) contrast(1.02)" }}
+      />
+    </motion.div>
+
+    {/* Bottom bar */}
+    <div className="flex items-center gap-2 px-4 py-2.5">
+      {["Basic Salary", "Tax Auto-calc", "Pension 7%", "Net Pay"].map((tag, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 4 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 + i * 0.08 }}
+          className="sans rounded-full border border-white/8 bg-white/[0.03] px-2 py-0.5 text-[9px] uppercase tracking-wider text-slate-600"
+        >
+          {tag}
+        </motion.span>
+      ))}
+    </div>
+  </motion.div>
+);
+
+const PlPreview = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+    className="relative overflow-hidden rounded-2xl border border-blue-400/15 bg-[#0d1117] p-1 shadow-2xl shadow-black/40"
+  >
+    {/* Blue top line */}
+    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-400/60 to-transparent" />
+    <div className="pointer-events-none absolute left-0 top-0 h-32 w-32 rounded-full bg-blue-500/[0.07] blur-[40px]" />
+
+    {/* Label bar */}
+    <div className="flex items-center justify-between px-4 py-2.5">
+      <div className="flex items-center gap-2">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-400" />
+        <span className="sans text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+          P&amp;L Report
+        </span>
+      </div>
+      <span className="sans rounded-full border border-white/8 bg-white/[0.04] px-2 py-0.5 text-[9px] uppercase tracking-wider text-slate-600">
+        One-click
+      </span>
+    </div>
+
+    {/* Actual P&L screenshot */}
+    <motion.div
+      initial={{ scale: 1.03, opacity: 0 }}
+      whileInView={{ scale: 1, opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className="overflow-hidden rounded-xl"
+    >
+      <img
+        src={plImg}
+        alt="Profit & Loss statement — Tomi International Hotel"
+        className="w-full"
+        style={{ filter: "brightness(0.97) contrast(1.02)" }}
+      />
+    </motion.div>
+
+    {/* Bottom bar */}
+    <div className="flex items-center gap-2 px-4 py-2.5">
+      {["Revenue", "COGS", "Gross Profit", "Net Income"].map((tag, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 4 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 + i * 0.08 }}
+          className="sans rounded-full border border-white/8 bg-white/[0.03] px-2 py-0.5 text-[9px] uppercase tracking-wider text-slate-600"
+        >
+          {tag}
+        </motion.span>
+      ))}
+    </div>
+  </motion.div>
+);
+
 export const Home = () => {
   const [pricingPlans, setPricingPlans] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -55,10 +177,10 @@ export const Home = () => {
         "Guests scan, browse, and order instantly from a polished digital menu. Zero friction, full elegance.",
     },
     {
-      icon: <CreditCardIcon className="h-6 w-6" />,
-      title: "Unified Payments",
+      icon: <BanknotesIcon className="h-6 w-6" />,
+      title: "Payroll System",
       description:
-        "Accept mobile, card, and cashless payments with one hospitality-grade flow.",
+        "Automate employee pay runs with Ethiopian tax brackets, pension deductions, and instant payslip generation.",
     },
     {
       icon: <ChartBarIcon className="h-6 w-6" />,
@@ -405,8 +527,8 @@ export const Home = () => {
                   },
                   {
                     num: "04",
-                    title: "Staff & Inventory Control",
-                    desc: "Track ingredients, manage employee shifts, and control costs — all from the same dashboard.",
+                    title: "Payroll Management",
+                    desc: "Automate salary calculations, Ethiopian tax deductions, pension contributions, and generate payslips instantly for every employee.",
                   },
                 ].map((item, i) => (
                   <motion.div
@@ -426,6 +548,154 @@ export const Home = () => {
                 ))}
               </div>
             </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── DIVIDER ──────────────────────────────────────────────────── */}
+      <div className="line-rule" />
+
+      {/* ── FEATURE SHOWCASE ────────────────────────────────────────── */}
+      <section className="relative py-24 grain overflow-hidden">
+        <div className="pointer-events-none absolute left-1/4 top-0 h-[500px] w-[500px] -translate-y-1/4 rounded-full bg-blue-600/[0.05] blur-[120px]" />
+        <div className="pointer-events-none absolute right-1/4 bottom-0 h-[500px] w-[500px] translate-y-1/4 rounded-full bg-amber-500/[0.04] blur-[120px]" />
+
+        <div className="container mx-auto px-6 lg:px-12">
+          {/* Section header */}
+          <div className="mb-16 text-center">
+            <Reveal><Label>See it in action</Label></Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="serif mx-auto mt-4 max-w-2xl text-[2rem] font-normal leading-tight text-white lg:text-[2.6rem]">
+                Powerful reports,
+                <br />
+                <span className="italic text-slate-400">out of the box.</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="sans mx-auto mt-4 max-w-xl text-[0.95rem] font-light leading-relaxed text-slate-500">
+                Every module generates beautiful, print-ready documents — no spreadsheets, no manual work. Just your live data, formatted instantly.
+              </p>
+            </Reveal>
+          </div>
+
+          {/* Shared vertical line spanning both pairs */}
+          <div className="relative">
+            <div className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-[2px] -translate-x-1/2 overflow-hidden lg:block">
+              <motion.div
+                initial={{ scaleY: 0 }}
+                whileInView={{ scaleY: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
+                style={{ transformOrigin: "top" }}
+                className="h-full w-full bg-gradient-to-b from-blue-400/70 via-white/25 to-amber-400/70"
+              />
+            </div>
+
+            {/* ── PAIR 1: P&L image LEFT · description RIGHT ── */}
+            <div className="relative grid items-center gap-8 pb-20 lg:grid-cols-2">
+              {/* Image */}
+              <Reveal className="lg:pr-12">
+                <PlPreview />
+              </Reveal>
+              {/* Description — centered in cell */}
+              <Reveal delay={0.12} className="lg:pl-12">
+                <div className="flex flex-col items-center justify-center text-center space-y-5">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/[0.07] px-4 py-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+                    <span className="sans text-[11px] font-semibold uppercase tracking-wider text-blue-400">Financial Reporting</span>
+                  </div>
+                  <h3 className="serif text-[1.6rem] font-normal leading-snug text-white">
+                    Profit &amp; Loss —
+                    <br />
+                    <span className="italic text-slate-400">generated in seconds.</span>
+                  </h3>
+                  <p className="sans max-w-xs text-[0.9rem] font-light leading-relaxed text-slate-400">
+                    Full revenue breakdown with COGS, operating expenses, tax, and net income — powered by your live data.
+                  </p>
+                  <ul className="space-y-2.5 text-left">
+                    {[
+                      "Revenue & COGS auto-breakdown",
+                      "Gross profit margin calculated",
+                      "Business income tax (15%)",
+                      "Net income with one click",
+                    ].map((t, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: 10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.2 + i * 0.08 }}
+                        className="sans flex items-center gap-3 text-sm font-light text-slate-400"
+                      >
+                        <CheckIcon className="h-4 w-4 shrink-0 text-blue-400" />
+                        {t}
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+              {/* Blue dot on the center line */}
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, duration: 0.35 }}
+                className="absolute left-1/2 top-1/2 z-10 hidden h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-400 shadow-lg shadow-blue-400/60 ring-4 ring-blue-400/20 lg:block"
+              />
+            </div>
+
+            {/* ── PAIR 2: description LEFT · Payslip image RIGHT ── */}
+            <div className="relative grid items-center gap-8 pt-4 lg:grid-cols-2">
+              {/* Description — centered in cell */}
+              <Reveal delay={0.12} className="lg:pr-12">
+                <div className="flex flex-col items-center justify-center text-center space-y-5">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-amber-400/20 bg-amber-400/[0.07] px-4 py-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+                    <span className="sans text-[11px] font-semibold uppercase tracking-wider text-amber-400">Payroll Management</span>
+                  </div>
+                  <h3 className="serif text-[1.6rem] font-normal leading-snug text-white">
+                    Payslips — accurate,
+                    <br />
+                    <span className="italic text-slate-400">compliant &amp; instant.</span>
+                  </h3>
+                  <p className="sans max-w-xs text-[0.9rem] font-light leading-relaxed text-slate-400">
+                    Ethiopian tax brackets, pension deductions, and every allowance handled automatically. Print-ready payslips on demand.
+                  </p>
+                  <ul className="space-y-2.5 text-left">
+                    {[
+                      "Ethiopian income tax brackets",
+                      "Pension 7% auto-deducted",
+                      "All allowances & bonuses included",
+                      "PDF-ready payslip, instantly",
+                    ].map((t, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.2 + i * 0.08 }}
+                        className="sans flex items-center gap-3 text-sm font-light text-slate-400"
+                      >
+                        <CheckIcon className="h-4 w-4 shrink-0 text-amber-400" />
+                        {t}
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+              {/* Image */}
+              <Reveal className="lg:pl-12">
+                <PayslipPreview />
+              </Reveal>
+              {/* Amber dot on the center line */}
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, duration: 0.35 }}
+                className="absolute left-1/2 top-1/2 z-10 hidden h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-400 shadow-lg shadow-amber-400/60 ring-4 ring-amber-400/20 lg:block"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -503,20 +773,20 @@ export const Home = () => {
               <p className="sans text-red-400">{error}</p>
             </div>
           ) : (
-            <div className="grid gap-6 lg:grid-cols-3 max-w-5xl mx-auto">
+            <div className="flex flex-wrap justify-center gap-6 max-w-5xl mx-auto">
               {pricingPlans.map((plan, index) => (
-                <Reveal key={index} delay={index * 0.1}>
+                <Reveal key={index} delay={index * 0.1} className="w-full sm:w-72 lg:w-80">
                   <div
-                    className={`relative flex h-full flex-col rounded-3xl border p-8 transition-all duration-300 card-hover ${
-                      plan.popular
+                    className={`relative flex flex-col h-full rounded-3xl border p-8 transition-all duration-300 card-hover ${
+                      plan.pinnedLabel
                         ? "border-amber-400/30 bg-gradient-to-b from-amber-400/[0.07] to-transparent glow-gold-sm lg:scale-105"
                         : "border-white/6 bg-white/[0.025]"
                     }`}
                   >
-                    {plan.popular && (
+                    {plan.pinnedLabel && (
                       <div className="sans absolute -top-3 left-8 inline-flex items-center gap-1.5 rounded-full bg-amber-400 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-black shadow-lg shadow-amber-400/20">
                         <span className="h-1.5 w-1.5 rounded-full bg-black/40" />
-                        Most Popular
+                        {plan.pinnedLabel}
                       </div>
                     )}
 
@@ -547,7 +817,7 @@ export const Home = () => {
                     <Link to={`/checkout/${plan.id}`} state={{ selectedPlan: plan }}>
                       <button
                         className={`sans w-full rounded-full py-3.5 text-[0.875rem] font-semibold transition-all duration-300 ${
-                          plan.popular
+                          plan.pinnedLabel
                             ? "bg-amber-400 text-black shadow-lg shadow-amber-400/20 hover:bg-amber-300"
                             : "border border-white/10 bg-white/[0.04] text-white hover:border-white/20 hover:bg-white/[0.08]"
                         }`}
